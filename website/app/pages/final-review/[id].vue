@@ -56,7 +56,11 @@ const canonicalPath = computed(() => {
   }
 })
 
-if (id.value && route.fullPath !== canonicalPath.value) {
+if (
+  id.value &&
+  // only compare route.path not route.fullPath as that will clobber ?search#id params
+  route.path !== canonicalPath.value
+) {
   await navigateTo({
     path: canonicalPath.value
   })

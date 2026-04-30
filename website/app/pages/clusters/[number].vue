@@ -23,7 +23,10 @@ const clusterNumber = computed(() => route.params.number ? parseInt(route.params
 
 const canonicalPath = computed(() => clusterNumber.value ? clusterNumberPathBuilder(clusterNumber.value) : undefined)
 
-if (route.fullPath !== canonicalPath.value) {
+if (
+  // only compare route.path not route.fullPath as that will clobber ?search#id params
+  route.path !== canonicalPath.value
+) {
   await navigateTo({
     path: canonicalPath.value,
   })
