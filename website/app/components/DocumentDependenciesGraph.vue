@@ -1,11 +1,12 @@
 <template>
-  <div ref="container"
+  <div ref="container" id="graph"
     class="overflow-hidden h-[75vh] flex items-center justify-center border border-gray-700 dark:border-gray-200 rounded-md inset-shadow-sm text-center">
     <Icon name="ei:spinner-3" size="1.3rem" class="animate-spin" />
   </div>
-  <form class="text-right">
-    <label class="cursor-pointer font-bold inline-block">
-      <input type="checkbox" name="showLegend" class="size-4 mr-1" :v-model="showLegend" :checked="showLegend" />
+  <form class="text-right mt-1">
+    <label class="cursor-pointer font-bold inline-block" :data-checked="showLegend">
+      <input type="checkbox" name="showLegend" class="size-4 mr-1 align-middle" :v-model="showLegend"
+        aria-controls="graph" :aria-expanded="showLegend" />
       Show legend?
     </label>
   </form>
