@@ -3,13 +3,6 @@
     class="overflow-hidden h-[75vh] flex items-center justify-center border border-gray-700 dark:border-gray-200 rounded-md inset-shadow-sm text-center">
     <Icon name="ei:spinner-3" size="1.3rem" class="animate-spin" />
   </div>
-  <form class="text-right mt-1">
-    <label class="cursor-pointer font-bold inline-block" :data-checked="showLegend">
-      <input type="checkbox" name="showLegend" class="size-4 mr-1 align-middle" :v-model="showLegend"
-        aria-controls="graph" :aria-expanded="showLegend" />
-      Show legend?
-    </label>
-  </form>
 
   <div v-show="tooltip.text" class="absolute transition-all" :style="{
     left: `${tooltip.position[0]}px`,
@@ -21,6 +14,15 @@
       <p v-for="line in tooltip.text">{{ line }}</p>
     </div>
   </div>
+
+  <form class="text-right mt-1">
+    <label class="cursor-pointer font-bold inline-block" :data-checked="showLegend">
+      <input type="checkbox" name="showLegend" class="size-4 mr-1 align-middle" :v-model="showLegend"
+        @change="announceChange" aria-controls="graph" :aria-expanded="showLegend" />
+      Show legend?
+    </label>
+  </form>
+
 </template>
 
 <script setup lang="ts">
@@ -50,6 +52,16 @@ const setTooltip: SetTooltip = (props) => {
     return
   }
   tooltip.value = props
+}
+
+/**
+ * This will be shown visually, but it's mostly for screenreaders
+ */
+const announceChange = () => {
+  tooltip.value = {
+    position: tooltip.value.position,
+    text: showLegend.value ? ['Graph shows legend'] : [`Graph shows cluster ${props.cluster.number}`]
+  }
 }
 
 const showLegend = ref(false)
