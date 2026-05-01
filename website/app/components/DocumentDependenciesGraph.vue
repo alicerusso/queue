@@ -72,6 +72,7 @@ const announceChange = (event: Event) => {
     position: tooltip.value.position,
     text: isChecked ? ['Graph shows legend'] : [`Graph shows cluster ${props.cluster.number}`]
   }
+  attemptToRenderGraph()
 }
 
 const showLegend = ref(false)
