@@ -59,8 +59,14 @@ const setTooltip: SetTooltip = (props) => {
 /**
  * This will be shown visually, but it's mostly for screenreaders
  */
-const announceChange = (event) => {
-  const { checked: isChecked } = event.target
+const announceChange = (event: Event) => {
+  const { target } = event
+  if (!(target instanceof HTMLInputElement)) {
+    const errorTitle = 'Expected native input[type=checkbox] but was'
+    console.error(errorTitle, target)
+    throw Error(`${errorTitle} (see console) ${target}`)
+  }
+  const { checked: isChecked } = target
   tooltip.value = {
     position: tooltip.value.position,
     text: isChecked ? ['Graph shows legend'] : [`Graph shows cluster ${props.cluster.number}`]
