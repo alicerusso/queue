@@ -199,7 +199,8 @@ const attemptToRenderGraph = () => {
   if (!container) {
     if (
       // only bother reporting error if DOM ref was expected to be found, ie after mounting
-      hasMounted.value === true) {
+      hasMounted.value === true
+    ) {
       console.error('container ref not found')
     }
     return
