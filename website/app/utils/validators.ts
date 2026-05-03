@@ -141,7 +141,7 @@ export const QueueCommonItemSchema = z.object({
   groupName: z.string().optional(),
   stdLevel: z.string().optional(),
   references: DocumentReferenceCommonSchema.array().optional(),
-  finalApprovalCounts: FinalApprovalCommonSchema.optional(),
+  finalApprovalCounts: FinalApprovalCommonSchema.optional()
 })
 
 export type QueueCommonItem = z.infer<typeof QueueCommonItemSchema>

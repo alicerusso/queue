@@ -51,7 +51,7 @@ import type { SortingState } from '@tanstack/vue-table'
 import Label from './Label.vue'
 import { getVNodeText } from '../utils/vue'
 import { getQueueIndex } from '../utils/api'
-import { calculateEnqueuedAtData, renderEnqueuedAt } from '~/utils/queue'
+import { calculateEnqueuedAtData, renderAssignmentsAsRoles, renderEnqueuedAt } from '~/utils/queue'
 import { DateTime } from 'luxon'
 import BaseBadge from './BaseBadge.vue'
 import { datatrackerDraftPathBuilder, finalReviewPathBuilder } from '~/utils/url'
@@ -148,55 +148,28 @@ const columns = [
   }),
   columnHelper.accessor(
     'assignmentsByRoles', {
-    header: 'Assignments',
+    header: 'Status',
     cell: data => {
       const value = data.getValue()
-      if (!value) {
-        return
-      }
-
-      // See https://github.com/ietf-tools/queue/issues/13
-      const editorRoles = ['first_editor', 'second_editor', 'final_review_editor']
-      const isAwaitingEditorAssignment = value.every(assignmentsByRole => assignmentsByRole.role !== 'blocked') &&
-        !value.some(assignmentsByRole => editorRoles.includes(assignmentsByRole.role))
-
-      const humanFriendlyName = (role: string): string => {
-        switch (role) {
-          case 'first_editor':
-            return 'In Progress (First Edit)'
-          case 'second_editor':
-            return 'In Progress (Second Edit)'
-          case 'final_review_editor':
-            return 'In Final Review'
-        }
-        return role.replace(/_/g, ' ')
-      }
-
-      return h('ul', { class: 'inline-flex flex-wrap items-center gap-1' }, [
-        isAwaitingEditorAssignment ? h('li',
-          { class: 'inline-flex flex-wrap items-center gap-1' },
-          h(BaseBadge, { color: 'emerald' }, 'Awaiting Editor Assignment')
-        ) : undefined,
-        ...value.map(assignmentsByRole => {
-          const badge = h(BaseBadge, { class: '' }, humanFriendlyName(assignmentsByRole.role))
-          return h('li', { class: 'inline-flex flex-wrap items-center gap-1' }, [
-            assignmentsByRole.role === 'final_review_editor' ?
-              h(Anchor, { href: finalReviewPathBuilder(data.row.original.name) },
-                () =>
-                  [
-                    badge,
-                    h('span', { class: 'underline text-xs ml-1' }, 'more details')
-                  ])
-              : badge,
-            assignmentsByRole.blockingReasons ?
-              h('span', { class: 'text-xs text-gray-500 dark:text-neutral-400' },
-                assignmentsByRole.blockingReasons.map(blockingReason =>
-                  blockingReason.reason.name
-                ))
-              : null,
-          ])
-        })])
-    }
+      return renderAssignmentsAsRoles(value, data.row.original.name)
+    },
+    sortingFn: (rowA, rowB) => {
+      // Keeping the sort function in sync with the render function is important
+      // so that similarly rendered items are sorted together.
+      // Because this column's render function is more complicated than usual
+      // (it's not just returning primitive values) we could either.
+      //   1) manually keep custom sorting logic in sync with the visual rendering,
+      //      or;
+      //   2) stringify the h() render output and sort as strings
+      // The later has less maintenance burden so we'll try (2) until it doesn't work.
+      const textA = getVNodeText(
+        renderAssignmentsAsRoles(rowA.original.assignmentsByRoles, rowA.original.name)
+      ).replace(/\s+/g, '') // normalise whitespace
+      const textB = getVNodeText(
+        renderAssignmentsAsRoles(rowB.original.assignmentsByRoles, rowB.original.name)
+      ).replace(/\s+/g, '') // normalise whitespace
+      return textA.localeCompare(textB)
+    },
   }),
   columnHelper.accessor(
     'ianaStatus', {

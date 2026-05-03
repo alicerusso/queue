@@ -26,14 +26,12 @@ export const getVNodeText = (vnode: unknown): string => {
       ) {
         return getVNodeText(children.default())
       } else if (Array.isArray(children)) {
-        return children
-          .map((item) => getVNodeText(item as ReturnType<typeof h>))
-          .join('')
+        return children.map((item) => getVNodeText(item as ReturnType<typeof h>)).join('')
       }
     } else {
       console.warn("Found object but don't know how to extract text from ", vnode)
     }
-  } else if(typeof vnode === 'function') {
+  } else if (typeof vnode === 'function') {
     return getVNodeText(vnode())
   } else {
     console.warn("Don't know how to extract text from ", vnode)
@@ -46,14 +44,13 @@ export const getVNodeText = (vnode: unknown): string => {
  * Vue's `class=""` attribute can take strings, arrays, objects, arrays of objects, etc
  * but the typing is just `any`. Use this for `class` props.
  *
- * Named VueStyleClass rather than VueClass to distinguish from class-based components
+ * Named VueStyleClass rather than VueClass to distinguish from "class" in the context of
+ * old Vue style class-based components
  **/
 export type VueStyleClass =
   | string
   | (string | Record<string, boolean | undefined>)[]
   | Record<string, boolean | undefined>
-
-
 
 /**
  * https://stackoverflow.com/questions/55140448/what-is-the-type-for-an-event-in-vue-typescript-project
