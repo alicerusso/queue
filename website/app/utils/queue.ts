@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon'
-import Anchor from '~/components/Anchor.vue'
-import BaseBadge from '~/components/BaseBadge.vue'
+import { finalReviewPathBuilder } from './url'
 import { type QueueCommonItem } from './validators'
+import { Anchor, BaseBadge } from '#components'
 
 export const calculateEnqueuedAtData = (enqueuedAtJSDate: Date) => {
   const enqueuedAt = DateTime.fromJSDate(enqueuedAtJSDate)

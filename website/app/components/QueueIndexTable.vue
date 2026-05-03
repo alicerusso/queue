@@ -53,8 +53,7 @@ import { getVNodeText } from '../utils/vue'
 import { getQueueIndex } from '../utils/api'
 import { calculateEnqueuedAtData, renderAssignmentsAsRoles, renderEnqueuedAt } from '~/utils/queue'
 import { DateTime } from 'luxon'
-import BaseBadge from './BaseBadge.vue'
-import { datatrackerDraftPathBuilder, finalReviewPathBuilder } from '~/utils/url'
+import { datatrackerDraftPathBuilder } from '~/utils/url'
 
 type Props = {
   filterByClusterNumber?: number,
