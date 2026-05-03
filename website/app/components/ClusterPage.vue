@@ -12,11 +12,6 @@
     </Heading>
     <QueueIndexTable :filter-by-cluster-number="props.clusterNumber" :show-final-approval-counts="true" class="mt-3" />
     <DocumentDependenciesGraph :cluster="clusterPackage.cluster" />
-    <table>
-      <tbody>
-        ...
-      </tbody>
-    </table>
   </div>
   <div v-else>
     <!-- 404 or unknown state -->

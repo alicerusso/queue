@@ -17,15 +17,15 @@
 
   <form class="text-right mt-1">
     <label class="cursor-pointer font-bold inline-block" :data-checked="showLegend">
-      <input type="checkbox" name="showLegend" class="size-4 mr-1 align-middle" value="checked" :v-model="showLegend"
-        @change="handleChange" :aria-controls="GRAPH_DOM_ID" :aria-expanded="showLegend" />
+      <input type="checkbox" name="showLegend" class="size-4 mr-1 align-middle" value="ok show the legend"
+        :v-model="showLegend" @change="handleChange" :aria-controls="GRAPH_DOM_ID" :aria-expanded="showLegend" />
       Show legend?
     </label>
   </form>
 </template>
 
 <script setup lang="ts">
-import { uniqBy } from 'es-toolkit';
+import { clamp, uniqBy } from 'es-toolkit';
 import { drawGraph, type DrawGraphParameters, type SetTooltip } from '~/utils/document_relations';
 import { legendData, type DataParam, type LinkParam, type NodeParam } from '~/utils/document_relations-utils'
 import { type ClusterDocumentCommon, type ClusterPackageCommon } from '../utils/validators'
@@ -39,20 +39,58 @@ const props = defineProps<Props>()
 
 const clusterToUse = ref(props.cluster)
 
-const GRAPH_DOM_ID = 'graph'
+const GRAPH_DOM_ID = 'cluster-graph'
 
 const router = useRouter()
 
 const containerRef = useTemplateRef('container')
 
-const tooltip = ref<{ text: string[] | undefined, position: [number, number] }>({ text: undefined, position: [0, 0] })
+type Tooltip = { text: string[] | undefined, position: [number, number] }
+
+const tooltip = ref<Tooltip>({ text: undefined, position: [0, 0] })
 
 const setTooltip: SetTooltip = (props) => {
+  const { value: container } = containerRef
+
+  if (!container) {
+    if (
+      // only bother reporting error if DOM ref was expected to be found, ie after mounting
+      hasMounted.value === true
+    ) {
+      console.error('container ref not found')
+    }
+    return
+  }
+
   if (!props) {
     tooltip.value.text = undefined
     return
   }
-  tooltip.value = props
+  const { position, text } = props
+
+  // the tooltip position is leftPx/topPx and because the tooltip element has width/height
+  // we never want to position it right-most or bottom-most as that would render offscreen.
+  // So subtract half the tooltip width/height to determine a position
+  const MINIMUM_TOOLTIP_HALF_WIDTH_PX = 50
+  const MINIMUM_TOOLTIP_HALF_HEIGHT_PX = 25
+
+  const clampedPosition: Tooltip['position'] = [
+    clamp(
+      position[0],
+      window.scrollX, // ensure it's visible onscreen
+      window.outerWidth - clamp(container.offsetWidth / 2, MINIMUM_TOOLTIP_HALF_WIDTH_PX, window.outerWidth)
+    ),
+    clamp(
+      position[1],
+      window.scrollY, // ensure it's visible onscreen
+      window.outerHeight - clamp(container.offsetHeight / 2, MINIMUM_TOOLTIP_HALF_HEIGHT_PX, window.outerHeight)
+    ),
+  ]
+
+  tooltip.value = {
+    text,
+    position: clampedPosition
+  }
 }
 
 /**
@@ -68,10 +106,10 @@ const handleChange = (event: Event) => {
   const { checked: isChecked } = target
   showLegend.value = isChecked
   console.log({ isChecked })
-  tooltip.value = {
+  setTooltip({
     position: tooltip.value.position,
     text: isChecked ? ['Graph shows legend'] : [`Graph shows cluster ${props.cluster.number}`]
-  }
+  })
   attemptToRenderGraph()
 }
 
@@ -241,13 +279,18 @@ const attemptToRenderGraph = () => {
   }
 }
 
-const colorMode = useColorMode()
-
-watch(() => colorMode.value, attemptToRenderGraph)
-watch(clusterGraphData, attemptToRenderGraph)
-watch(showLegend, attemptToRenderGraph)
-onMounted(attemptToRenderGraph)
+onMounted(() => {
+  hasMounted.value = true
+  attemptToRenderGraph()
+})
 onUnmounted(() => {
   hasMounted.value = false
 })
+
+const colorMode = useColorMode()
+watch(() => colorMode.value, attemptToRenderGraph)
+
+watch(clusterGraphData, attemptToRenderGraph)
+
+watch(showLegend, attemptToRenderGraph)
 </script>
