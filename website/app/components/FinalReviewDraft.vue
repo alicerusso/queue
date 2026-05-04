@@ -6,7 +6,7 @@
     </Heading>
 
     <Heading :level="headingLevelPlusOne" class="mt-3 mb-1">Approval Status</Heading>
-    <RpcTable v-if="finalReview.finalApprovals" class="mx-auto">
+    <RpcTable v-if="finalReview.finalApprovals && finalReview.finalApprovals.length > 0" class="mx-auto">
       <RpcThead>
         <tr>
           <RpcTh>Name</RpcTh>
@@ -30,7 +30,7 @@
         </tr>
       </RpcTbody>
     </RpcTable>
-    <p v-else class="italic">No status available yet.</p>
+    <p v-else class="italic">No final approvals available.</p>
 
     <Heading :level="headingLevelPlusOne" class="mt-3 mb-1">Approval Logs</Heading>
     <ol v-if="finalReview.renderableApprovalLogMessages && finalReview.renderableApprovalLogMessages.length > 0"
