@@ -3,6 +3,7 @@
     <Heading :level="props.headingLevel" :style-level="headingLevelPlusTwo" class="mb-1" :id="props.id"
       has-internal-link>
       <span class="font-mono">{{ props.draftName }}</span> final review
+      <component :is="AssignmentsAsRolesComponent" />
     </Heading>
 
     <Heading :level="headingLevelPlusOne" class="mt-3 mb-1">Approval Status</Heading>
@@ -49,6 +50,7 @@
 <script setup lang="ts">
 import { clamp } from 'es-toolkit'
 import { DateTime } from 'luxon'
+import { renderAssignmentsAsRoles } from '../utils/queue'
 
 type Props = {
   id: string
@@ -114,4 +116,15 @@ if (!finalReview.value) {
     fatal: true
   })
 }
+
+const AssignmentsAsRolesComponent = computed(() => {
+  if (!props.queue) return null
+  const item = props.queue.items.find(queueCommonItem => queueCommonItem.name === props.draftName)
+  if (!item) return null
+  const { assignmentsByRoles, name } = item
+  if (!assignmentsByRoles) return
+
+  return renderAssignmentsAsRoles(assignmentsByRoles, name)
+})
+
 </script>
