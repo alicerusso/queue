@@ -60,11 +60,11 @@ type Props = {
   showFinalApprovalCounts?: boolean
 }
 
-const url = useRequestURL()
-
 const props = withDefaults(defineProps<Props>(), {
   showFinalApprovalCounts: false
 })
+
+const origin = usePublicSiteUrlOrigin()
 
 const {
   data,
@@ -72,7 +72,7 @@ const {
   error,
 } = await useAsyncData(
   'queue-index',
-  () => getQueueIndex(url.hostname),
+  () => getQueueIndex(origin),
   {
     server: false,
     lazy: true

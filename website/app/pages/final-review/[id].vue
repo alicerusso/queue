@@ -44,8 +44,6 @@ const mode = computed(() => {
   }
 })
 
-const url = useRequestURL()
-
 const canonicalPath = computed(() => {
   if (!mode.value) return undefined
   if (mode.value.cluster) {
@@ -66,13 +64,15 @@ if (
   })
 }
 
+const origin = usePublicSiteUrlOrigin()
+
 const {
   data,
   status,
   error,
 } = await useAsyncData(
   'final-review-index',
-  () => getFinalReviewIndex(url.hostname),
+  () => getFinalReviewIndex(origin),
   {
     server: true, // rendering on the server to generate real 404s for missing content
     lazy: false,

@@ -26,11 +26,11 @@ type Props = {
 
 const props = defineProps<Props>()
 
-const url = useRequestURL()
+const origin = usePublicSiteUrlOrigin()
 
 const { data: clusterPackage, error, status } = await useAsyncData(
   () => `cluster-${props.clusterNumber}`,
-  () => getClusterPackage(url.hostname, props.clusterNumber),
+  () => getClusterPackage(origin, props.clusterNumber),
   {
     server: true, // rendering on the server to generate real 404s for missing content
     lazy: true,

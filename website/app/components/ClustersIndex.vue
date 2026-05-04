@@ -51,7 +51,7 @@ import {
 import { getVNodeText } from '../utils/vue'
 import { DateTime } from 'luxon'
 
-const url = useRequestURL()
+const origin = usePublicSiteUrlOrigin()
 
 const {
   data,
@@ -59,7 +59,7 @@ const {
   error,
 } = await useAsyncData(
   'clusters-index',
-  () => getClusterIndex(url.hostname),
+  () => getClusterIndex(origin),
   {
     server: false,
     lazy: true

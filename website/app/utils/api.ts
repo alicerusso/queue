@@ -6,9 +6,9 @@ import {
 } from './url'
 import { ClusterPackageCommonSchema } from './validators'
 
-export const getQueueIndex = async (hostName: string) => {
+export const getQueueIndex = async (origin: string) => {
   const path = API_QUEUE_INDEX_PATH
-  const url = new URL(path, `https://${hostName}`).toString()
+  const url = new URL(path, origin).toString()
   const unverifiedData = await $fetch(url)
   const { data, error } = QueueCommonSchema.safeParse(unverifiedData)
   if (error || !data) {
@@ -18,9 +18,9 @@ export const getQueueIndex = async (hostName: string) => {
   return data
 }
 
-export const getFinalReviewIndex = async (hostName: string) => {
+export const getFinalReviewIndex = async (origin: string) => {
   const path = API_FINAL_REVIEW_INDEX_PATH
-  const url = new URL(path, `https://${hostName}`).toString()
+  const url = new URL(path, origin).toString()
   const unverifiedData = await $fetch(url)
   const { data, error } = QueueCommonSchema.safeParse(unverifiedData)
   if (error || !data) {
@@ -35,9 +35,9 @@ export const getFinalReviewIndex = async (hostName: string) => {
   return data
 }
 
-export const getClusterIndex = async (hostName: string) => {
+export const getClusterIndex = async (origin: string) => {
   const path = API_CLUSTER_INDEX_PATH
-  const url = new URL(path, `https://${hostName}`).toString()
+  const url = new URL(path, origin).toString()
   const unverifiedData = await $fetch(url)
   const { data, error } = ClusterIndexCommonSchema.safeParse(unverifiedData)
   if (error || !data) {
@@ -52,9 +52,9 @@ export const getClusterIndex = async (hostName: string) => {
   return data
 }
 
-export const getClusterPackage = async (hostName: string, clusterNumber: number) => {
+export const getClusterPackage = async (origin: string, clusterNumber: number) => {
   const path = apiClusterNumberPathBuilder(clusterNumber)
-  const url = new URL(path, `https://${hostName}`).toString()
+  const url = new URL(path, origin).toString()
   const unverifiedData = await $fetch(url)
   const { data, error } = ClusterPackageCommonSchema.safeParse(unverifiedData)
   if (error || !data) {

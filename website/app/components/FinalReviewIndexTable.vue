@@ -54,7 +54,7 @@ import Label from './Label.vue'
 import { finalReviewPathBuilder } from '~/utils/url'
 import { DateTime } from 'luxon'
 
-const url = useRequestURL()
+const origin = usePublicSiteUrlOrigin()
 
 const {
   data,
@@ -62,7 +62,7 @@ const {
   error,
 } = await useAsyncData(
   'final-review-index',
-  () => getFinalReviewIndex(url.hostname),
+  () => getFinalReviewIndex(origin),
   {
     server: false,
     lazy: true
