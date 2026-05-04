@@ -5,14 +5,14 @@
       Cluster <span class="font-mono">{{ props.cluster }}</span> final review
       (formerly auth48)
     </Heading>
-    <p v-if="clusterDrafts" class="italic">
+    <p v-if="clusterDrafts" class="mx-2 italic">
       This cluster has {{ clusterDrafts.length }}
       {{ SPACE }}
       <template v-if="clusterDrafts.length === 1">draft.</template>
       <template v-else>drafts.</template>
     </p>
-    <div class="mt-4 mb-8 py-2 px-4 sm:rounded-lg bg-gray-200 dark:bg-gray-800 text-sm max-w-md">
-      <p class="font-bold">Table of contents:</p>
+    <div class="mt-4 mb-8 pt-2 pb-3 px-2 sm:rounded-lg bg-gray-200 dark:bg-gray-800 text-sm max-w-md">
+      <p class="font-bold px-1">Table of contents:</p>
       <ul class="mt-0 list-disc pl-6 text-black dark:text-white">
         <li v-for="(draft, index) in clusterDrafts" :key="draft.name">
           <a :href="`#${makeDomId(draft.name, index)}`" :class="[ANCHOR_TAILWIND_STYLE, 'wrap-anywhere']">
@@ -21,7 +21,7 @@
         </li>
       </ul>
     </div>
-    <div v-for="(draft, index) in clusterDrafts" :key="draft.name" class="mb-6">
+    <div v-for="(draft, index) in clusterDrafts" :key="draft.name" class="mb-6 mx-2">
       <FinalReviewDraft heading-level="2" :draft-name="draft.name" :queue="props.queue"
         :id="makeDomId(draft.name, index)" />
     </div>
