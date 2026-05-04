@@ -9,6 +9,28 @@ export async function blobs(request: Request, env: Env) {
   if (normalizedPath.startsWith(API_V1_PREFIX)) {
     const objectPath = normalizedPath.substring(API_V1_PREFIX.length)
 
+    const FAVICON_PREFIX = 'favicon/'
+    if (objectPath.startsWith(FAVICON_PREFIX) && objectPath.endsWith('.png')) {
+      const dimensionsAndFileExtension = objectPath.substring(FAVICON_PREFIX.length)
+      const faviconObjectPath = `other/favicon-${dimensionsAndFileExtension}`
+
+      const object = await env.QUEUE_BUCKET.get(faviconObjectPath)
+      if (object) {
+        const headers = new Headers()
+        object.writeHttpMetadata(headers)
+        headers.set('etag', object.httpEtag)
+        headers.set('Cf-R2-Served', '1')
+        headers.set('Access-Control-Allow-Origin', '*')
+        headers.set('Content-Encoding', 'gzip')
+        headers.set('Content-Type', 'image/png')
+
+        return new Response(object.body, {
+          headers
+        })
+      }
+    }
+
+
     // -> Fetch R2 object
     if (objectPath.endsWith('.json') || objectPath.endsWith('.png')) {
       const object = await env.QUEUE_BUCKET.get(objectPath)
@@ -24,26 +46,6 @@ export async function blobs(request: Request, env: Env) {
         } else if (objectPath.endsWith('.png')) {
           headers.set('Content-Type', 'image/png')
         }
-
-        return new Response(object.body, {
-          headers
-        })
-      }
-    }
-
-    const FAVICON_PREFIX = 'favicon/'
-    if (objectPath.startsWith(FAVICON_PREFIX) && objectPath.endsWith('.png')) {
-      const faviconObjectPath = `other/favicon-${objectPath.substring(FAVICON_PREFIX.length)}`
-
-      const object = await env.QUEUE_BUCKET.get(faviconObjectPath)
-      if (object) {
-        const headers = new Headers()
-        object.writeHttpMetadata(headers)
-        headers.set('etag', object.httpEtag)
-        headers.set('Cf-R2-Served', '1')
-        headers.set('Access-Control-Allow-Origin', '*')
-        headers.set('Content-Encoding', 'gzip')
-        headers.set('Content-Type', 'image/png')
 
         return new Response(object.body, {
           headers

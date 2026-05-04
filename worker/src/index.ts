@@ -10,6 +10,7 @@ router
   .get('/api/v1/queue*', blobs)
   .get('/api/v1/thumbnail*', blobs)
   .get('/api/v1/clusters*', blobs)
+  .get('/api/v1/favicon*', blobs)
   .get('/api/v1/final-review*', blobs)
   // Fallback to origin
   .all('*', async (req) => {

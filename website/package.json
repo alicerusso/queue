@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@iconify-json/fluent": "1.2.46",
+    "@iconify-json/pajamas": "1.2.15",
     "@nuxt/content": "3.7.1",
     "@nuxt/icon": "1.13.0",
     "@nuxtjs/color-mode": "3.4.4",
