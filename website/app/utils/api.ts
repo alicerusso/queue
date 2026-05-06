@@ -2,7 +2,8 @@ import {
   API_QUEUE_INDEX_PATH,
   API_CLUSTER_INDEX_PATH,
   apiClusterNumberPathBuilder,
-  API_FINAL_REVIEW_INDEX_PATH
+  API_FINAL_REVIEW_INDEX_PATH,
+  apiFinalReviewCluster
 } from './url'
 import { ClusterPackageCommonSchema } from './validators'
 
@@ -36,7 +37,7 @@ export const getFinalReviewIndex = async (origin: string) => {
 }
 
 export const getFinalReviewCluster = async (origin: string, clusterNumber: number) => {
-  const path = apiClusterNumberPathBuilder(clusterNumber)
+  const path = apiFinalReviewCluster(clusterNumber)
   const url = new URL(path, origin).toString()
   const unverifiedData = await $fetch(url)
   const { data, error } = QueueCommonSchema.safeParse(unverifiedData)
