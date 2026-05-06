@@ -27,7 +27,8 @@ type BlockingReason = NonNullable<AssignmentByRole['blockingReasons']>[number]
 
 export const renderAssignmentsAsRoles = (
   assignmentsByRoles: QueueCommonItem['assignmentsByRoles'],
-  draftName: string
+  draftName: string,
+  hideLinkDetails: boolean
 ) => {
   if (!assignmentsByRoles) {
     return
@@ -76,29 +77,29 @@ export const renderAssignmentsAsRoles = (
   return h('ul', { class: 'inline-flex flex-wrap items-center gap-1' }, [
     isAwaitingEditorAssignment
       ? h(
-          'li',
-          { class: 'inline-flex flex-wrap items-center gap-1' },
-          h(BaseBadge, { color: 'emerald' }, () => 'Awaiting Editor Assignment')
-        )
+        'li',
+        { class: 'inline-flex flex-wrap items-center gap-1' },
+        h(BaseBadge, { color: 'emerald' }, () => 'Awaiting Editor Assignment')
+      )
       : undefined,
     ...assignmentsByRolesFiltered.map((assignmentByRole) => {
       const badge = h(BaseBadge, { class: '' }, () => humanFriendlyRole(assignmentByRole))
 
       return h('li', { class: 'inline-flex flex-wrap items-center gap-1' }, [
-        assignmentByRole.role === 'final_review_editor'
+        hideLinkDetails !== true && assignmentByRole.role === 'final_review_editor'
           ? h(Anchor, { href: finalReviewPathBuilder(draftName) }, () => [
-              badge,
-              h('span', { class: 'underline text-xs ml-1' }, 'more details')
-            ])
+            badge,
+            h('span', { class: 'underline text-xs ml-1' }, 'more details')
+          ])
           : badge,
         assignmentByRole.blockingReasons
           ? h(
-              'span',
-              { class: 'text-xs text-gray-500 dark:text-neutral-400' },
-              assignmentByRole.blockingReasons.map((blockingReason) =>
-                humanFriendlyBlockingReason(blockingReason)
-              )
+            'span',
+            { class: 'text-xs text-gray-500 dark:text-neutral-400' },
+            assignmentByRole.blockingReasons.map((blockingReason) =>
+              humanFriendlyBlockingReason(blockingReason)
             )
+          )
           : null
       ])
     })

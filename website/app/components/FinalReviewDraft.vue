@@ -122,7 +122,7 @@ const AssignmentsAsRolesComponent = computed(() => {
   const { assignmentsByRoles, name } = item
   if (!assignmentsByRoles) return
 
-  return renderAssignmentsAsRoles(assignmentsByRoles, name)
+  return renderAssignmentsAsRoles(assignmentsByRoles, name, true)
 })
 
 </script>

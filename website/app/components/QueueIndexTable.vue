@@ -150,7 +150,7 @@ const columns = [
     header: 'Status',
     cell: data => {
       const value = data.getValue()
-      return renderAssignmentsAsRoles(value, data.row.original.name)
+      return renderAssignmentsAsRoles(value, data.row.original.name, false)
     },
     sortingFn: (rowA, rowB) => {
       // Keeping the sort function in sync with the render function is important
@@ -162,10 +162,10 @@ const columns = [
       //   2) stringify the h() render output and sort as strings
       // The later has less maintenance burden so we'll try (2) until it doesn't work.
       const textA = getVNodeText(
-        renderAssignmentsAsRoles(rowA.original.assignmentsByRoles, rowA.original.name)
+        renderAssignmentsAsRoles(rowA.original.assignmentsByRoles, rowA.original.name, false)
       ).replace(/\s+/g, '') // normalise whitespace
       const textB = getVNodeText(
-        renderAssignmentsAsRoles(rowB.original.assignmentsByRoles, rowB.original.name)
+        renderAssignmentsAsRoles(rowB.original.assignmentsByRoles, rowB.original.name, false)
       ).replace(/\s+/g, '') // normalise whitespace
       return textA.localeCompare(textB)
     },
