@@ -1,16 +1,8 @@
 <template>
-  <NuxtLink
-    v-if="isInternal && !isHash && !isMailTo"
-    v-bind="sanitisedAnchorProps"
-    data-is-nuxt-link
-  >
+  <NuxtLink v-if="isInternal && !isHash && !isMailTo && !isApi" v-bind="sanitisedAnchorProps" data-is-nuxt-link>
     <slot />
   </NuxtLink>
-  <a
-    v-else
-    v-bind="sanitisedAnchorProps"
-    data-is-hyperlink
-  >
+  <a v-else v-bind="sanitisedAnchorProps" data-is-hyperlink>
     <slot />
   </a>
 </template>
@@ -25,17 +17,18 @@
 import { computed } from 'vue'
 import { NuxtLink } from '#components'
 import { EXTERNAL_LINK_REL, TARGET_NEW_WINDOW } from '~/utils/html'
-import { isHashLink, isInternalLink, isMailToLink } from '~/utils/url'
+import { isHashLink, isInternalLink, isMailToLink, isApiLink } from '~/utils/url'
 
 const props = defineProps<{ href?: string; id?: string }>()
 
 const isInternal = computed(() => isInternalLink(props.href))
 const isMailTo = computed(() => isMailToLink(props.href))
 const isHash = computed(() => isHashLink(props.href))
+const isApi = computed(() => isApiLink(props.href))
 
 const sanitisedAnchorProps = computed(() => {
   const isNuxtLink =
-    props.href && isInternal.value && !isMailTo.value && !isHash.value
+    props.href && isInternal.value && !isMailTo.value && !isHash.value && !isApi.value
   const isExternalLink =
     props.href && !isInternal.value && !isMailTo.value && !isHash.value
 

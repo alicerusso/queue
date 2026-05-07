@@ -108,6 +108,13 @@ export const isMailToLink = (href?: string): boolean => {
   return mailtoRegex.test(href ?? '')
 }
 
+export const isApiLink = (href?: string): boolean => {
+  if (!href) {
+    return false
+  }
+  return href.startsWith('/api/')
+}
+
 /**
  * Converts arbitrary text into a custom id that is DOMId compliant (ie no whitespace)
  *
