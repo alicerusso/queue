@@ -1,6 +1,6 @@
 # RFC Editor Queue
 
-As streams approve documents for publication, they enter the [publication queue](https://queue.rfc-editor.org), which provides information about documents as they progress through the [RFC editorial process](https://authors.ietf.org/en/rfc-publication-process). The queue is also available as an [XML file](//api/v1/queue).
+As streams approve documents for publication, they enter the [publication queue](https://queue.rfc-editor.org), which provides information about documents as they progress through the [RFC editorial process](https://authors.ietf.org/en/rfc-publication-process). The queue is also available as an [XML file](//api/v1/queue.xml).
 
 ## Status
 
@@ -12,8 +12,8 @@ As streams approve documents for publication, they enter the [publication queue]
   - **Author Input Required** - The RFC Production Center is awaiting a reply from the author.
   - **Waiting for Action Holder** - The  RFC Production Center is awaiting a reply from an action holder (for example, an Area Director).
   - **Reference Not Received** - The document has a normative reference to an Internet-Draft that is not yet in the queue.
-  - **Reference Not Received (2nd Generation)** - The document has a normative reference to a document that normatively references
-  - **Reference Not Received (3rd Generation)** - The document has a normative reference to a document that normatively references a document that normatively references
+  - **Reference Not Received (2nd Generation)** - The document has a normative reference to a document that normatively references an Internet-Draft that is not yet in the queue.
+  - **Reference Not Received (3rd Generation)** - The document has a normative reference to a document that normatively references a document that normatively references an Internet-Draft that is not yet in the queue.
   - **Stream Hold** - The document is being held per the request of the publication stream that approved it. See details on streams on [What is an RFC?](https://www.rfc-editor.org/series/rfc/).
 
 ## Labels
