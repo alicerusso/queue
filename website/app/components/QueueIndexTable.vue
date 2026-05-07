@@ -159,32 +159,31 @@ const columns = [
       //      or;
       //   2) stringify the h() render output and sort as strings
       // The later has less maintenance burden so we'll try (2) until it doesn't work.
-      const textA = getVNodeText(
-        renderAssignmentsAsRoles({
-          assignmentsByRoles: rowA.original.assignmentsByRoles,
-          hideLinkDetails: false,
-          linkFinalReviewsBy: rowA.original.rfcNumber ? {
-            type: 'RFC_NUMBER',
-            rfcNumber: rowA.original.rfcNumber
-          } : {
-            type: 'DRAFTNAME',
-            draftName: rowA.original.name
-          }
-        })
-      ).replace(/\s+/g, '') // normalise whitespace
-      const textB = getVNodeText(
-        renderAssignmentsAsRoles({
-          assignmentsByRoles: rowB.original.assignmentsByRoles,
-          hideLinkDetails: false,
-          linkFinalReviewsBy: rowB.original.rfcNumber ? {
-            type: 'RFC_NUMBER',
-            rfcNumber: rowB.original.rfcNumber
-          } : {
-            type: 'DRAFTNAME',
-            draftName: rowB.original.name
-          }
-        })
-      ).replace(/\s+/g, '') // normalise whitespace
+      const nodesA = renderAssignmentsAsRoles({
+        assignmentsByRoles: rowA.original.assignmentsByRoles,
+        hideLinkDetails: false,
+        linkFinalReviewsBy: rowA.original.rfcNumber ? {
+          type: 'RFC_NUMBER',
+          rfcNumber: rowA.original.rfcNumber
+        } : {
+          type: 'DRAFTNAME',
+          draftName: rowA.original.name
+        }
+      })
+      const textA = getVNodeText(nodesA).replace(/\s+/g, '') // normalise whitespace
+
+      const nodesB = renderAssignmentsAsRoles({
+        assignmentsByRoles: rowB.original.assignmentsByRoles,
+        hideLinkDetails: false,
+        linkFinalReviewsBy: rowB.original.rfcNumber ? {
+          type: 'RFC_NUMBER',
+          rfcNumber: rowB.original.rfcNumber
+        } : {
+          type: 'DRAFTNAME',
+          draftName: rowB.original.name
+        }
+      })
+      const textB = getVNodeText(nodesB).replace(/\s+/g, '') // normalise whitespace
       const textComparison = textA.localeCompare(textB)
       if (textComparison !== 0) {
         return textComparison
