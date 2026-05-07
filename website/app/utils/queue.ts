@@ -117,3 +117,22 @@ export const renderAssignmentsAsRoles = ({
     })
   ])
 }
+
+export const sortIsoDateStrings = (aIsoDate: string | undefined, bIsoDate: string | undefined): number => {
+  if (aIsoDate === undefined && bIsoDate === undefined) {
+    return 0
+  }
+  if (aIsoDate !== undefined && bIsoDate === undefined) {
+    return -1
+  }
+  if (aIsoDate === undefined && bIsoDate !== undefined) {
+    return 1
+  }
+  // this function only exists to narrow types for TS benefit
+  if (aIsoDate === undefined || bIsoDate === undefined) {
+    throw Error('internal error: Expected undefined dates to be filtered by now')
+  }
+  const aDateTime = DateTime.fromISO(aIsoDate)
+  const bDateTime = DateTime.fromISO(bIsoDate)
+  return aDateTime.toMillis() - bDateTime.toMillis()
+}

@@ -52,7 +52,7 @@ import { Anchor, Icon } from '#components'
 import Label from './Label.vue'
 import { getVNodeText } from '../utils/vue'
 import { getQueueIndex } from '../utils/api'
-import { calculateEnqueuedAtData, renderAssignmentsAsRoles, renderEnqueuedAt } from '~/utils/queue'
+import { calculateEnqueuedAtData, renderAssignmentsAsRoles, renderEnqueuedAt, sortIsoDateStrings } from '~/utils/queue'
 import { datatrackerDraftUrlBuilder } from '~/utils/url'
 
 type Props = {
@@ -126,26 +126,10 @@ const columns = [
       const enqueuedAtData = calculateEnqueuedAtData(dateTime.toJSDate())
       return renderEnqueuedAt(enqueuedAtData)
     },
-    sortingFn: (rowA, rowB, columnId) => {
-      const now = DateTime.now()
-
-      const aIso = rowA.getValue(columnId)
-      if (typeof aIso !== 'string') {
-        console.error("Not string was", typeof aIso, aIso)
-        throw Error(`Expected string (iso date string) but was something else. See console.`)
-      }
-      const aDateTime = DateTime.fromISO(aIso)
-      const aDiffInDays = now.diff(aDateTime, 'days').days
-
-      const bIso = rowB.getValue(columnId)
-      if (typeof bIso !== 'string') {
-        console.error("Not string was", typeof bIso, bIso)
-        throw Error(`Expected string (iso date string) but was something else. See console.`)
-      }
-      const bDateTime = DateTime.fromISO(bIso)
-      const bDiffInDays = now.diff(bDateTime, 'days').days
-
-      return (aDiffInDays > bDiffInDays) ? 1 : (aDiffInDays < bDiffInDays) ? -1 : 0
+    sortingFn: (rowA, rowB) => {
+      const aIso = rowA.original.enqueuedAtIso
+      const bIso = rowB.original.enqueuedAtIso
+      return sortIsoDateStrings(aIso, bIso)
     },
   }),
   columnHelper.accessor(
@@ -201,7 +185,16 @@ const columns = [
           }
         })
       ).replace(/\s+/g, '') // normalise whitespace
-      return textA.localeCompare(textB)
+      const textComparison = textA.localeCompare(textB)
+      if (textComparison !== 0) {
+        return textComparison
+      }
+
+      // https://github.com/ietf-tools/queue/issues/62
+      // if the text is the same then order by weeks in queue
+      const aIso = rowA.original.enqueuedAtIso
+      const bIso = rowB.original.enqueuedAtIso
+      return sortIsoDateStrings(aIso, bIso)
     },
   }),
   columnHelper.accessor(
