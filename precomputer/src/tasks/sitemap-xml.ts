@@ -4,7 +4,7 @@ import { WriteStream } from 'node:fs'
 import { PassThrough, Readable } from 'node:stream'
 import { type SitemapItemLoose, EnumChangefreq, SitemapAndIndexStream, SitemapStream, streamToPromise } from 'sitemap'
 import { type ClusterIndexCommon, type QueueCommon } from '../../../website/app/utils/validators.ts'
-import { clusterPathBuilder, finalReviewClusterPathBuilder, finalReviewDraftPathBuilder } from '../utils/url.ts'
+import { clusterPathBuilder, CLUSTERS_INDEX_PATH, FINAL_REVIEW_INDEX_PATH, finalReviewClusterPathBuilder, finalReviewDraftPathBuilder, finalReviewRfcPathBuilder } from '../utils/url.ts'
 import { type S3UploadTask, siteMapXmlFilenameBuilder, siteMapXmlPathPrefixBuilder } from '../utils/s3.ts'
 
 const precomputerRoot = path.resolve(import.meta.dirname, '..', '..')
@@ -31,12 +31,12 @@ export const getSiteMapXmls = async ({ websiteOrigin, clusterIndex, finalReviewI
       priority: 0.3
     },
     {
-      url: `${websiteOrigin}/clusters/`,
+      url: `${websiteOrigin}${CLUSTERS_INDEX_PATH}`,
       changefreq: EnumChangefreq.DAILY,
       priority: 0.3
     },
     {
-      url: `${websiteOrigin}/final-review/`,
+      url: `${websiteOrigin}${FINAL_REVIEW_INDEX_PATH}`,
       changefreq: EnumChangefreq.DAILY,
       priority: 0.3
     },
@@ -66,7 +66,9 @@ export const getSiteMapXmls = async ({ websiteOrigin, clusterIndex, finalReviewI
           }
         }),
         {
-          url: `${websiteOrigin}${finalReviewDraftPathBuilder(queueItem.name)}`,
+          url: `${websiteOrigin}${queueItem.rfcNumber
+            ? finalReviewRfcPathBuilder(queueItem.rfcNumber)
+            : finalReviewDraftPathBuilder(queueItem.name)}`,
           changefreq: EnumChangefreq.WEEKLY,
           priority: 0.3
         }
