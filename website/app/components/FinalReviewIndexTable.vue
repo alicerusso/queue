@@ -38,7 +38,7 @@
 </template>
 
 <script setup lang="ts">
-import { Anchor } from '#components'
+import { Anchor, Icon } from '#components'
 import {
   FlexRender,
   getCoreRowModel,
@@ -87,8 +87,8 @@ const columns = [
             : finalReviewPathBuilder(data.row.original.name),
           class: `${ANCHOR_TAILWIND_STYLE} underline`
         }, () => [
-          h('b', 'RFC-to-be '),
-          data.getValue(),
+          h('span', { class: 'font-normal' }, `RFC-to-be${NBSP}`),
+          h('span', { class: 'font-semibold' }, data.getValue()),
         ]
       )
     },
@@ -127,7 +127,10 @@ const columns = [
               href: clusterFinalReviewPathBuilder(clusterNumber),
               class: `${ANCHOR_TAILWIND_STYLE} underline`
             },
-            () => clusterNumber
+            () => [
+              h(Icon, { name: 'pajamas:group', class: 'h-5 w-5 inline-block mr-1' }),
+              clusterNumber
+            ]
           )
         )
       }))

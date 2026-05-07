@@ -8,7 +8,7 @@
         : 'text-black dark:text-gray-200'
   ]">
     <span v-if="props.document.rfcNumber">
-      <span class="font-normal">RFC{{ NBSP }}</span>
+      <span class="font-normal">RFC-to-be{{ NBSP }}</span>
       <span class="font-semibold">{{ `${props.document.rfcNumber}:${SPACE} ` }}</span>
     </span>
     <span class="font-mono font-normal mr-1">

@@ -239,10 +239,16 @@ const columns = [
       const clusters = data.getValue()
       if (!clusters) return undefined
       return h('span', clusters.map(cluster => {
-        return h(Anchor, { href: `/clusters/${cluster}` }, () => [
-          h(Icon, { name: 'pajamas:group', class: 'h-5 w-5 inline-block mr-1' }),
-          String(cluster)
-        ])
+        return h(
+          Anchor,
+          {
+            href: `/clusters/${cluster}`,
+            class: `${ANCHOR_TAILWIND_STYLE}`
+          },
+          () => [
+            h(Icon, { name: 'pajamas:group', class: 'h-5 w-5 inline-block mr-1' }),
+            String(cluster)
+          ])
       }))
     },
     sortingFn: (rowA, rowB, columnId) => {

@@ -39,7 +39,7 @@
 
 <script setup lang="ts">
 import type { SortingState } from '@tanstack/vue-table'
-import { Anchor, ClustersIndexItem } from '#components'
+import { Anchor, ClustersIndexItem, Icon } from '#components'
 import {
   FlexRender,
   getCoreRowModel,
@@ -74,12 +74,13 @@ const sorting = ref<SortingState>([])
 
 const columns = [
   columnHelper.accessor('number', {
-    header: 'Cluster number',
+    header: 'Cluster',
     cell: data => {
       return h(Anchor, {
         href: clusterNumberPathBuilder(data.getValue()),
         'class': [ANCHOR_TAILWIND_STYLE, 'font-bold text-md whitespace-nowrap']
       }, () => [
+        h(Icon, { name: 'pajamas:group', class: 'h-5 w-5 inline-block mr-1' }),
         data.getValue(),
       ])
     },

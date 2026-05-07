@@ -2,8 +2,9 @@
   <template v-if="finalReviewCluster">
     <Heading level="1" style-level="3"
       class="w-full mx-2 mb-2 md:mb-3 text-gray-600 dark:text-gray-200 font-semibold text-balance">
-      Cluster <span class="font-mono">{{ props.cluster }}</span> final review
-      (formerly auth48)
+      Cluster <span class="font-mono">{{ props.cluster }}</span>
+      final review
+      (formerly AUTH48)
     </Heading>
     <p class="mx-2 italic">
       This cluster has {{ finalReviewCluster.items.length }}
@@ -15,7 +16,7 @@
       <p class="font-bold px-1">Table of contents:</p>
       <ul class="mt-0 list-disc pl-6 text-black dark:text-white">
         <li v-for="(draft, index) in finalReviewCluster.items" :key="draft.name">
-          <a :href="`#${makeDomId(draft.name, index)}`" :class="[ANCHOR_TAILWIND_STYLE, 'wrap-anywhere']">
+          <a :href="`#${makeDomId(draft.name)}`" :class="[ANCHOR_TAILWIND_STYLE, 'wrap-anywhere']">
             {{ draft.name }}
           </a>
         </li>
@@ -24,7 +25,7 @@
     <div v-if="finalReviewCluster" v-for="(draft, index) in finalReviewCluster.items" :key="draft.name"
       class="mb-6 mx-2">
       <FinalReviewDraft heading-level="2" :draft-name="draft.name" :queue="finalReviewCluster"
-        :id="makeDomId(draft.name, index)" />
+        :id="makeDomId(draft.name)" />
     </div>
 
     <hr class="mt-12" />
