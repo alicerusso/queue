@@ -38,7 +38,7 @@
 </template>
 
 <script setup lang="ts">
-import { Anchor, Icon } from '#components'
+import { DateTime } from 'luxon'
 import {
   FlexRender,
   getCoreRowModel,
@@ -48,12 +48,12 @@ import {
   getSortedRowModel,
 } from '@tanstack/vue-table'
 import type { SortingState } from '@tanstack/vue-table'
+import { Anchor, Icon } from '#components'
 import Label from './Label.vue'
 import { getVNodeText } from '../utils/vue'
 import { getQueueIndex } from '../utils/api'
 import { calculateEnqueuedAtData, renderAssignmentsAsRoles, renderEnqueuedAt } from '~/utils/queue'
-import { DateTime } from 'luxon'
-import { datatrackerDraftPathBuilder } from '~/utils/url'
+import { datatrackerDraftUrlBuilder } from '~/utils/url'
 
 type Props = {
   filterByClusterNumber?: number,
@@ -85,13 +85,16 @@ const columnHelper = createColumnHelper<QueueCommonItem>()
 
 const sorting = ref<SortingState>([])
 
-const datatrackerUrlOrigin = useDatatrackerSiteUrlOrigin()
-
 const columns = [
   columnHelper.accessor('name', {
     header: 'Document',
     cell: data => {
-      return h(Anchor, { href: `${datatrackerUrlOrigin}${datatrackerDraftPathBuilder(data.row.original.name)}`, 'class': ANCHOR_TAILWIND_STYLE }, () => [
+      return h(Anchor, {
+        href: datatrackerDraftUrlBuilder(data.row.original.name),
+        class: ANCHOR_TAILWIND_STYLE,
+        rel: 'noopener',
+        target: '_blank'
+      }, () => [
         data.getValue(),
         h(Icon, { name: 'fluent:window-new-20-regular', size: "1.25em", class: "text-gray-700 dark:text-neutral-300 ml-1 align-middle" }),
       ])

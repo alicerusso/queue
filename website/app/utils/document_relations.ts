@@ -145,9 +145,21 @@ export function drawGraph({ data: _data, pushRouter, setTooltip }: Props) {
   let max_r = 0
   const a = node
     .append("a")
-    .attr("href", (d) => d.url ??
-      '#' // we need a href (eg '#') to be focusable even if it doesn't have a d.url so that the `title` is available
+    .attr("href", (d) =>
+      d.url ?? '#' // we need a href (eg '#') to be focusable even if it doesn't have a d.url so that the `title` is available. Accessibility-wise we should probably sue a <button> rather than a '#' link.
     )
+    .attr("rel", (d) => {
+      if (isExternalLink(d.url)) {
+        return 'noopener'
+      }
+      return null
+    })
+    .attr("target", (d) => {
+      if (isExternalLink(d.url)) {
+        return '_blank'
+      }
+      return null
+    })
     .attr("title", (d) => getCircleTheme(d).tooltip?.join(" ") ?? null)
     .on("focus mouseover", function (e, d) {
       e.preventDefault()
@@ -181,7 +193,6 @@ export function drawGraph({ data: _data, pushRouter, setTooltip }: Props) {
       setTooltip()
     })
     .on('click', (e) => {
-      e.preventDefault()
       const { target } = e
       if (!(target instanceof SVGElement || target instanceof HTMLElement)) {
         console.error("Expected element but received ", target)
@@ -197,10 +208,11 @@ export function drawGraph({ data: _data, pushRouter, setTooltip }: Props) {
         console.error("Closest <a> didn't have `href` attribute.", { parents: getAncestors(target) })
         return
       }
-      if (href === '#') {
-        console.info('Ignoring href navigation to empty internal link ie "#"')
+      if (href === '#' || isExternalLink(href)) {
+        console.info('Ignoring href navigation to # or external site')
         return
       }
+      e.preventDefault()
       console.log("SPA navigating to ", href)
       pushRouter(href)
     })

@@ -29,7 +29,7 @@ import { clamp, uniqBy } from 'es-toolkit';
 import { drawGraph, type DrawGraphParameters, type SetTooltip } from '~/utils/document_relations';
 import { legendData, type DataParam, type LinkParam, type NodeParam } from '~/utils/document_relations-utils'
 import { type ClusterDocumentCommon, type ClusterPackageCommon } from '../utils/validators'
-import { datatrackerDraftPathBuilder } from '~/utils/url';
+import { datatrackerDraftUrlBuilder } from '~/utils/url';
 
 type Props = {
   cluster: ClusterPackageCommon["cluster"],
@@ -151,7 +151,7 @@ const clusterGraphData = computed(() => {
         if (!targetDocument) {
           referenceNodes.push({
             id: reference.targetDraftName,
-            url: `/docs/${reference.targetDraftName}`,
+            url: datatrackerDraftUrlBuilder(reference.targetDraftName),
             isNormRef: true,
           })
           return true
@@ -169,7 +169,7 @@ const clusterGraphData = computed(() => {
         return {
           id: name,
           rfcNumber: rfcToBe.rfcNumber ?? undefined,
-          url: `/docs/${name}`,
+          url: datatrackerDraftUrlBuilder(name),
           disposition: parseDisposition(disposition),
           ...partialNodeParam,
         }
@@ -181,16 +181,16 @@ const clusterGraphData = computed(() => {
         const target = targetDraftName ? clusterToUse.value.documents.find(doc => doc.name === targetDraftName) : undefined
 
         return [
-          draft ? rfcToBeToNodeParam(draft, { isNormRef: false }) : draftName ? { id: draftName, url: `/docs/${draftName}`, isNormRef: false } : undefined,
+          draft ? rfcToBeToNodeParam(draft, { isNormRef: false }) : draftName ? { id: draftName, url: datatrackerDraftUrlBuilder(draftName), isNormRef: false } : undefined,
           target ? rfcToBeToNodeParam(target, {
             isNormRef: true, // all targets are norm refs
-          }) : targetDraftName ? { id: targetDraftName, url: `/docs/${targetDraftName}`, isNormRef: true } : undefined,
+          }) : targetDraftName ? { id: targetDraftName, url: datatrackerDraftUrlBuilder(targetDraftName), isNormRef: true } : undefined,
         ].filter(isNodeParam)
       }))
 
       return [{
         id: name,
-        url: datatrackerDraftPathBuilder(name),
+        url: datatrackerDraftUrlBuilder(name),
         rfcNumber,
         isReceived,
         disposition,

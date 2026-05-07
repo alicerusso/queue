@@ -73,8 +73,9 @@ export const apiFinalReviewCluster = (clusterNumber: number) => {
   return `/api/v1/final-review/c${clusterNumber}.json`
 }
 
-export const datatrackerDraftPathBuilder = (draftName: string) => {
-  return `/doc/${draftName}/` as const
+export const datatrackerDraftUrlBuilder = (draftName: string) => {
+  const datatrackerUrlOrigin = useDatatrackerSiteUrlOrigin()
+  return `${datatrackerUrlOrigin}/doc/${draftName}/` as const
 }
 
 export const linkPreviewImageUrlBuilder = (
