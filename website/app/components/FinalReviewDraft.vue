@@ -13,10 +13,10 @@
       <component :is="AssignmentsAsRolesComponent" />
     </Heading>
 
-    <p v-if="finalReview.clusters">This document is part of
+    <p v-if="finalReview.clusters" class="text-sm">This document is part of
       <template v-for="(cluster, index) in finalReview.clusters">
-        <Anchor :href="clusterNumberPathBuilder(cluster)">
-          <Icon name="pajamas:group" class="h-5 w-5 inline-block mr-1" />{{ cluster }}
+        <Anchor :href="clusterNumberPathBuilder(cluster)" :class="`${ANCHOR_TAILWIND_STYLE}`">
+          <Icon name="pajamas:group" class="h-5 w-5 align-middle inline-block mr-0.5" />{{ cluster }}
         </Anchor>
         <template v-if="index < finalReview.clusters.length - 1">{{ COMMA }} </template>
       </template>, so may have additional holds before publication.
@@ -51,7 +51,7 @@
 
     <Heading :level="headingLevelPlusOne" class="mt-3 mb-1">Notes</Heading>
     <ol v-if="finalReview.renderableApprovalLogMessages && finalReview.renderableApprovalLogMessages.length > 0"
-      class="flex flex-col gap-2">
+      class="flex flex-col gap-2 text-sm">
       <li v-for="approvalLog in finalReview.renderableApprovalLogMessages">
         <component :is="approvalLog.logMessageComponent" />
         <p v-if="approvalLog.time" class="text-xs italic text-gray-600 dark:text-gray-400 mt-1">Log posted

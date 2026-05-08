@@ -103,6 +103,7 @@ All URIs are relative to *http://localhost*
 | [**metadataValidationResultsSync**](PurpleApi.md#metadatavalidationresultssync) | **POST** /api/rpc/documents/{draft_name}/metadata_validation_results/sync/ |  |
 | [**profile**](PurpleApi.md#profile) | **GET** /api/rpc/profile/ |  |
 | [**profileRetrieveDemoOnly**](PurpleApi.md#profileretrievedemoonly) | **GET** /api/rpc/profile/{rpc_person_id} |  |
+| [**queueCounts**](PurpleApi.md#queuecounts) | **GET** /api/rpc/queue/counts/ |  |
 | [**queueList**](PurpleApi.md#queuelist) | **GET** /api/rpc/queue/ |  |
 | [**rpcPersonAssignmentsList**](PurpleApi.md#rpcpersonassignmentslist) | **GET** /api/rpc/rpc_person/{person_id}/assignments/ |  |
 | [**rpcPersonList**](PurpleApi.md#rpcpersonlist) | **GET** /api/rpc/rpc_person/ |  |
@@ -7247,6 +7248,69 @@ example().catch(console.error);
 ### Return type
 
 **{ [key: string]: any; }**
+
+### Authorization
+
+[cookieAuth](../README.md#cookieAuth)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: `application/json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** |  |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## queueCounts
+
+> QueueCounts queueCounts()
+
+
+
+Item counts for each queue tab
+
+### Example
+
+```ts
+import {
+  Configuration,
+  PurpleApi,
+} from '';
+import type { QueueCountsRequest } from '';
+
+async function example() {
+  console.log("🚀 Testing  SDK...");
+  const config = new Configuration({ 
+    // To configure API key authorization: cookieAuth
+    apiKey: "YOUR API KEY",
+  });
+  const api = new PurpleApi(config);
+
+  try {
+    const data = await api.queueCounts();
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+This endpoint does not need any parameter.
+
+### Return type
+
+[**QueueCounts**](QueueCounts.md)
 
 ### Authorization
 

@@ -77,6 +77,7 @@ import type {
   PublishRfcRequest,
   PublishRfcStatus,
   PublishValidationError,
+  QueueCounts,
   QueueItem,
   RfcAuthor,
   RfcAuthorRequest,
@@ -226,6 +227,8 @@ import {
     PublishRfcStatusToJSON,
     PublishValidationErrorFromJSON,
     PublishValidationErrorToJSON,
+    QueueCountsFromJSON,
+    QueueCountsToJSON,
     QueueItemFromJSON,
     QueueItemToJSON,
     RfcAuthorFromJSON,
@@ -5722,6 +5725,43 @@ export class PurpleApi extends runtime.BaseAPI {
      */
     async profileRetrieveDemoOnly(requestParameters: ProfileRetrieveDemoOnlyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<{ [key: string]: any; }> {
         const response = await this.profileRetrieveDemoOnlyRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for queueCounts without sending the request
+     */
+    async queueCountsRequestOpts(): Promise<runtime.RequestOpts> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+
+        let urlPath = `/api/rpc/queue/counts/`;
+
+        return {
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        };
+    }
+
+    /**
+     * Item counts for each queue tab
+     */
+    async queueCountsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<QueueCounts>> {
+        const requestOptions = await this.queueCountsRequestOpts();
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => QueueCountsFromJSON(jsonValue));
+    }
+
+    /**
+     * Item counts for each queue tab
+     */
+    async queueCounts(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<QueueCounts> {
+        const response = await this.queueCountsRaw(initOverrides);
         return await response.value();
     }
 

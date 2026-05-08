@@ -137,6 +137,7 @@ const columns = [
     header: 'Status',
     cell: data => {
       const value = data.getValue()
+      const ianaStatus = data.row.original.ianaStatus
 
       return renderAssignmentsAsRoles({
         assignmentsByRoles: value,
@@ -195,21 +196,6 @@ const columns = [
       const bIso = rowB.original.enqueuedAtIso
       return sortIsoDateStrings(aIso, bIso)
     },
-  }),
-  columnHelper.accessor(
-    'ianaStatus', {
-    header: () => h('span', [
-      h('abbr', { class: 'no-underline', title: 'Internet Assigned Numbers Authority' }, 'IANA'),
-      ' status'
-    ]),
-    cell: data => {
-      const value = data.getValue()
-      if (!value) {
-        return
-      }
-      return h('span', value.description)
-    },
-    enableSorting: false,
   }),
   ...(props.showFinalApprovalCounts ? [
     columnHelper.accessor(

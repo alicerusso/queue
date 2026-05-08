@@ -88,6 +88,7 @@ docs/PublishRfcRequest.md
 docs/PublishRfcStatus.md
 docs/PublishValidationError.md
 docs/PurpleApi.md
+docs/QueueCounts.md
 docs/QueueItem.md
 docs/RfcAuthor.md
 docs/RfcAuthorRequest.md
@@ -207,6 +208,7 @@ models/PublishPermissionDenied.ts
 models/PublishRfcRequest.ts
 models/PublishRfcStatus.ts
 models/PublishValidationError.ts
+models/QueueCounts.ts
 models/QueueItem.ts
 models/RfcAuthor.ts
 models/RfcAuthorRequest.ts

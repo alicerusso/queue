@@ -87,6 +87,7 @@ export * from './PublishPermissionDenied.ts';
 export * from './PublishRfcRequest.ts';
 export * from './PublishRfcStatus.ts';
 export * from './PublishValidationError.ts';
+export * from './QueueCounts.ts';
 export * from './QueueItem.ts';
 export * from './RfcAuthor.ts';
 export * from './RfcAuthorRequest.ts';
