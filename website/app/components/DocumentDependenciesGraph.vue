@@ -1,10 +1,10 @@
 <template>
   <div ref="container" :id="GRAPH_DOM_ID"
-    class="overflow-hidden h-[75vh] flex items-center justify-center border border-gray-700 dark:border-gray-200 rounded-md inset-shadow-sm text-center">
+    class="overflow-hidden h-[75vh] flex items-center justify-center border border-gray-700 dark:border-gray-200 rounded-md inset-shadow-sm text-center bg-white dark:bg-black">
     <Icon name="ei:spinner-3" size="1.3rem" class="animate-spin" />
   </div>
 
-  <div v-show="tooltip.text" class="absolute transition-all" :style="{
+  <div v-show="tooltip.text" ref="tooltip" class="absolute transition-all" :style="{
     left: `${tooltip.position[0]}px`,
     top: `${tooltip.position[1]}px`,
   }">
@@ -43,16 +43,18 @@ const GRAPH_DOM_ID = 'cluster-graph'
 
 const router = useRouter()
 
-const containerRef = useTemplateRef('container')
+const containerDOMRef = useTemplateRef('container')
+
+const tooltipDOMRef = useTemplateRef('tooltip')
 
 type Tooltip = { text: string[] | undefined, position: [number, number] }
 
 const tooltip = ref<Tooltip>({ text: undefined, position: [0, 0] })
 
 const setTooltip: SetTooltip = (props) => {
-  const { value: container } = containerRef
+  const { value: tooltipDOM } = tooltipDOMRef
 
-  if (!container) {
+  if (!tooltipDOM) {
     if (
       // only bother reporting error if DOM ref was expected to be found, ie after mounting
       hasMounted.value === true
@@ -68,24 +70,23 @@ const setTooltip: SetTooltip = (props) => {
   }
   const { position, text } = props
 
-  // the tooltip position is leftPx/topPx and because the tooltip element has width/height
-  // we never want to position it right-most or bottom-most as that would render offscreen.
-  // So subtract half the tooltip width/height to determine a position
-  const MINIMUM_TOOLTIP_HALF_WIDTH_PX = 50
-  const MINIMUM_TOOLTIP_HALF_HEIGHT_PX = 25
+  const bufferXPx = Math.max(150, tooltipDOM.offsetWidth)
+  const bufferYPx = Math.max(75, tooltipDOM.offsetHeight)
 
   const clampedPosition: Tooltip['position'] = [
     clamp(
       position[0],
-      window.scrollX, // ensure it's visible onscreen
-      window.outerWidth - clamp(container.offsetWidth / 2, MINIMUM_TOOLTIP_HALF_WIDTH_PX, window.outerWidth)
+      window.scrollX + bufferXPx, // ensure it's visible onscreen
+      window.scrollX + window.outerWidth - bufferXPx
     ),
     clamp(
       position[1],
-      window.scrollY, // ensure it's visible onscreen
-      window.outerHeight - clamp(container.offsetHeight / 2, MINIMUM_TOOLTIP_HALF_HEIGHT_PX, window.outerHeight)
+      window.scrollY + bufferYPx, // ensure it's visible onscreen
+      window.scrollY + window.outerHeight - bufferYPx
     ),
   ]
+
+  console.log('set tooltip', position, clampedPosition)
 
   tooltip.value = {
     text,
@@ -232,7 +233,7 @@ const clusterGraphData = computed(() => {
 })
 
 const attemptToRenderGraph = () => {
-  const { value: container } = containerRef
+  const { value: container } = containerDOMRef
 
   if (!container) {
     if (

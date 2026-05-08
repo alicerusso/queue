@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="my-6">
     <RpcTable>
       <RpcThead>
         <tr v-for="headerGroup in table.getHeaderGroups()" :key="headerGroup.id">
@@ -30,10 +30,6 @@
         </tr>
       </RpcTfoot>
     </RpcTable>
-    <p v-if="generatedAt" class="text-sm italic text-gray-600 dark:text-gray-400 mt-1">
-      Last updated
-      <TimeStamp :dateTime="generatedAt" />
-    </p>
   </div>
 </template>
 
@@ -78,8 +74,6 @@ const {
     lazy: true
   }
 )
-
-const generatedAt = computed(() => data.value?.timestampIso ? DateTime.fromISO(data.value.timestampIso) : undefined)
 
 const columnHelper = createColumnHelper<QueueCommonItem>()
 
@@ -284,9 +278,5 @@ const table = useVueTable({
         ? updaterOrValue(sorting.value)
         : updaterOrValue
   },
-})
-
-useHead({
-  title: 'RPC Queue'
 })
 </script>

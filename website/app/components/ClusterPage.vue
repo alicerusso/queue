@@ -12,6 +12,10 @@
     </Heading>
     <QueueIndexTable :filter-by-cluster-number="props.clusterNumber" :show-final-approval-counts="true" class="mt-3" />
     <DocumentDependenciesGraph :cluster="clusterPackage.cluster" />
+    <p v-if="generatedAt" class="text-sm italic text-gray-600 dark:text-gray-400">
+      Last updated
+      <TimeStamp :dateTime="generatedAt" />
+    </p>
   </div>
   <div v-else>
     <!-- 404 or unknown state -->
@@ -20,6 +24,8 @@
 </template>
 
 <script setup lang="ts">
+import { DateTime } from 'luxon'
+
 type Props = {
   clusterNumber: number
 }
@@ -44,8 +50,5 @@ if (status.value === 'error' || status.value === 'success' && clusterPackage ===
   })
 }
 
-useHead({
-  title: `Cluster ${props.clusterNumber}`
-})
-
+const generatedAt = computed(() => clusterPackage.value?.timestampIso ? DateTime.fromISO(clusterPackage.value.timestampIso) : undefined)
 </script>
