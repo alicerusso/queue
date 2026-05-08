@@ -1,8 +1,7 @@
 <template>
   <div v-if="finalReview">
-    <Heading :level="props.headingLevel" :style-level="headingLevelPlusTwo" class="mb-1" :id="props.id"
+    <Heading :level="props.headingLevel" :style-level="headingLevelPlusOne" class="mt-8 mb-1" :id="props.id"
       has-internal-link>
-      Final Review:
       <template v-if="
         finalReview.rfcNumber // all final reviews should have an RFC number, but the model doesn't require it so we'll conditionally render it
       ">
@@ -11,6 +10,7 @@
       </template>
       <span class="font-mono">({{ props.draftName }})</span>
       <component :is="AssignmentsAsRolesComponent" />
+      <component :is="LabelsComponent" />
     </Heading>
 
     <p v-if="finalReview.clusters" class="text-sm">This document is part of
@@ -22,7 +22,7 @@
       </template>, so may have additional holds before publication.
     </p>
 
-    <Heading :level="headingLevelPlusOne" class="mt-3 mb-1">Approval Status</Heading>
+    <Heading :level="headingLevelPlusOne" :style-level="headingLevelPlusTwo" class="mt-3 mb-1">Approval Status</Heading>
     <RpcTable v-if="finalReview.finalApprovals && finalReview.finalApprovals.length > 0" class="mx-auto">
       <RpcThead>
         <tr>
@@ -49,7 +49,7 @@
     </RpcTable>
     <p v-else class="italic">No final approvals available.</p>
 
-    <Heading :level="headingLevelPlusOne" class="mt-3 mb-1">Notes</Heading>
+    <Heading :level="headingLevelPlusOne" :style-level="headingLevelPlusTwo" class="mt-3 mb-1">Notes</Heading>
     <ol v-if="finalReview.renderableApprovalLogMessages && finalReview.renderableApprovalLogMessages.length > 0"
       class="flex flex-col gap-2 text-sm">
       <li v-for="approvalLog in finalReview.renderableApprovalLogMessages">
@@ -68,6 +68,8 @@ import { clamp } from 'es-toolkit'
 import { DateTime } from 'luxon'
 import { renderAssignmentsAsRoles } from '../utils/queue'
 import { COMMA, NBSP } from '../utils/strings'
+import BaseBadge from './BaseBadge.vue'
+import Label from './Label.vue'
 
 type Props = {
   id: string
@@ -150,6 +152,16 @@ const AssignmentsAsRolesComponent = computed(() => {
       draftName: item.name
     }
   })
+})
+
+const LabelsComponent = computed(() => {
+  if (!props.queue) return null
+  const item = props.queue.items.find(queueCommonItem => queueCommonItem.name === props.draftName)
+  if (!item || !item.labels) return null
+
+  return h('ul', { class: 'inline-flex flex-wrap gap-2' }, item.labels.map(label => {
+    return h('li', { class: 'inline' }, h(Label, { label }))
+  }))
 })
 
 </script>
