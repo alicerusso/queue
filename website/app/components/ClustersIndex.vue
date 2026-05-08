@@ -1,5 +1,6 @@
 <template>
   <div>
+    <p v-if="data?.list">Total Number of Active clusters: {{ data?.list.length }}</p>
     <RpcTable>
       <RpcThead>
         <tr v-for="headerGroup in table.getHeaderGroups()" :key="headerGroup.id">
@@ -87,7 +88,7 @@ const columns = [
     sortingFn: 'alphanumeric',
   }),
   columnHelper.accessor('documents', {
-    header: 'Members',
+    header: 'Documents',
     cell: data => {
       const docs = data.getValue()
       if (data.row.original.allPublished) {
@@ -122,9 +123,5 @@ const table = useVueTable({
         ? updaterOrValue(sorting.value)
         : updaterOrValue
   },
-})
-
-useHead({
-  title: 'Clusters'
 })
 </script>
