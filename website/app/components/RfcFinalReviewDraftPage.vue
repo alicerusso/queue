@@ -75,7 +75,7 @@ if (
 }
 
 useQueueRfcEditorHead({
-  title: `RFC ${props.rfcNumber} final review`,
+  title: `RFC-to-be ${props.rfcNumber} final review`,
   canonicalPath: canonicalPath.value,
   contentType: 'article'
 })
