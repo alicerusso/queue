@@ -1,6 +1,6 @@
 import { groupBy, uniq } from 'es-toolkit'
 import { DateTime } from 'luxon'
-import { PurpleApi, type Cluster, type ApiPubqQueueListRequest, QueueItem } from '../../generated/purple_client/index.ts'
+import { PurpleApi, type Cluster, type ApiPubqQueueListRequest, type QueueItem } from '../../generated/purple_client/index.ts'
 import {
   type QueueCommon,
   type QueueCommonItem,
