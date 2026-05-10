@@ -110,7 +110,7 @@ export const getQueueCommon = async ({ api, params }: Props): Promise<QueueCommo
         group,
         rfcNumber: rfcNumber ?? undefined,
         groupName: groupName ?? undefined,
-        actionholderSet: parseActionHolderSet(actionholderSet),
+        actionholderSet: parseActionHolderSet(actionholderSet, rfcNumber ? `RFC ${rfcNumber}` : name),
         stdLevel,
         references: parseReferences(references),
         authors: authors.map((author) => {

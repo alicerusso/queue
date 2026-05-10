@@ -95,10 +95,12 @@ export const parseLabels = (labels: QueueItem['labels']): QueueCommonItem['label
 }
 
 
-export const parseActionHolderSet = (actionHolderSet: QueueItem['actionholderSet']): QueueCommonItem['actionholderSet'] => {
+export const parseActionHolderSet = (actionHolderSet: QueueItem['actionholderSet'], idForDebug: string): QueueCommonItem['actionholderSet'] => {
   if (!actionHolderSet) {
     return undefined
   }
+
+  console.log(`[${idForDebug}]`, 'FOUND actionHolderSet')
 
   return actionHolderSet.map((actionHolder): ActionHolder => {
     const { person, deadline, sinceWhen, completed, comment, body } = actionHolder
