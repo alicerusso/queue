@@ -1,7 +1,11 @@
 <template>
   <div>
-    <p v-if="data?.list" class="text-sm pl-2 pb-2">Total number of active clusters:
+    <p v-if="data?.list" class="text-sm pl-2 pb-1">Total Number of Active clusters:
       <b>{{ data.list.length }}</b>
+    </p>
+    <p v-if="data?.list" class="text-sm pl-2 pb-2">Number of clusters that contain one or more documents with "Reference
+      Not Received":
+      <b> {{ stats.totalClustersWithDocumentsReferenceNotReceived }} </b>
     </p>
     <RpcTable>
       <RpcThead>
@@ -41,6 +45,7 @@
 </template>
 
 <script setup lang="ts">
+import { DateTime } from 'luxon'
 import type { SortingState } from '@tanstack/vue-table'
 import { Anchor, ClustersIndexItem, Icon } from '#components'
 import {
@@ -52,7 +57,6 @@ import {
   getSortedRowModel,
 } from '@tanstack/vue-table'
 import { getVNodeText } from '../utils/vue'
-import { DateTime } from 'luxon'
 import type { ClusterDocumentCommon } from '../utils/validators'
 
 const origin = usePublicSiteUrlOrigin()
@@ -162,5 +166,23 @@ const table = useVueTable({
         ? updaterOrValue(sorting.value)
         : updaterOrValue
   },
+})
+
+type StatKeys = 'totalClustersWithDocumentsReferenceNotReceived'
+
+const stats = computed((): Record<StatKeys, number> => {
+  if (!data.value) return {
+    totalClustersWithDocumentsReferenceNotReceived: 0,
+  }
+
+  const totalClustersWithDocumentsReferenceNotReceived = data.value.list.map(item => item.documents
+    .some(doc => !doc.isReceived))
+    .reduce(
+      (acc, clusterHasNotReceived) => acc + (clusterHasNotReceived ? 1 : 0), 0
+    )
+
+  return {
+    totalClustersWithDocumentsReferenceNotReceived
+  }
 })
 </script>
