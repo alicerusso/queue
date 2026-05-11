@@ -62,6 +62,4 @@ const queueItemsFilterDone = computed((): QueueCommonItem[] => {
     queueItem => queueItemsFilterPublisher.value.every(queueItemPublisher => queueItemPublisher.name !== queueItem.name)
   ) ?? []
 })
-
-
 </script>
