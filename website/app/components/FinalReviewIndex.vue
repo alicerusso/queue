@@ -9,14 +9,14 @@
     <FinalReviewIndexTable :queue-items="data?.pendingFinalApproval" :error="error" :status="status" />
 
     <Heading level="2" class="mt-6 mx-2 mb-2 md:mb-3 text-gray-600 dark:text-gray-200 font-semibold text-balance">
-      For publishing ({{ queueItemsFilterPublisher.length }})
-    </Heading>
-    <FinalReviewIndexTable :queue-items="queueItemsFilterPublisher" :error="error" :status="status" />
-
-    <Heading level="2" class="mt-6 mx-2 mb-2 md:mb-3 text-gray-600 dark:text-gray-200 font-semibold text-balance">
       Done ({{ queueItemsFilterDone.length }})
     </Heading>
     <FinalReviewIndexTable :queue-items="queueItemsFilterDone" :error="error" :status="status" />
+
+    <Heading level="2" class="mt-6 mx-2 mb-2 md:mb-3 text-gray-600 dark:text-gray-200 font-semibold text-balance">
+      For publishing ({{ queueItemsFilterPublisher.length }})
+    </Heading>
+    <FinalReviewIndexTable :queue-items="queueItemsFilterPublisher" :error="error" :status="status" />
 
     <p v-if="generatedAt" class="text-sm italic text-gray-600 dark:text-gray-400 mt-1">
       Last updated
