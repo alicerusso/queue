@@ -33,7 +33,7 @@
         </tr>
       </RpcTfoot>
     </RpcTable>
-    <p v-if="data?.timestampIso" class="text-sm italic text-gray-600 dark:text-gray-400 mt-1">
+    <p v-if="data?.timestampIso" class="mt-1 text-sm italic text-gray-600 dark:text-gray-400">
       Last updated
       <TimeStamp :dateTimeIso="data.timestampIso" />
     </p>

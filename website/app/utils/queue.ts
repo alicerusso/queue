@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 import { finalReviewPathBuilder } from './url'
-import { type QueueCommonItem } from './validators'
+import { type QueueCommonItem, type ThemeColorCommon } from './validators'
 import { Anchor, BaseBadge, TimeStamp } from '#components'
 
 export const calculateEnqueuedAtData = (enqueuedAtJSDate: Date) => {
@@ -53,7 +53,7 @@ export const renderAssignmentsAsRoles = ({
   })
 
   // See https://github.com/ietf-tools/queue/issues/13#issue-4018981455
-  const editorRoles = ['first_editor', 'second_editor', 'final_review_editor']
+  const editorRoles: AssignmentByRole['role'][] = ['first_editor', 'second_editor', 'final_review_editor']
   const isAwaitingEditorAssignment =
     assignmentsByRolesFiltered.every((assignmentByRole) => assignmentByRole.role !== 'blocked') &&
     !assignmentsByRolesFiltered.some((assignmentByRole) =>
@@ -68,8 +68,6 @@ export const renderAssignmentsAsRoles = ({
         return 'In Progress (Second Edit)'
       case 'final_review_editor':
         return 'In Final Review'
-      case 'Reference: First Edit Incomplete':
-        break
     }
     return assignmentByRole.role.replace(/_/g, ' ')
   }
@@ -91,7 +89,7 @@ export const renderAssignmentsAsRoles = ({
       )
       : undefined,
     ...assignmentsByRolesFiltered.map((assignmentByRole) => {
-      const badge = h(BaseBadge, { class: '' }, () => humanFriendlyRole(assignmentByRole))
+      const badge = h(BaseBadge, { color: getRoleColor(assignmentByRole.role) }, () => humanFriendlyRole(assignmentByRole))
 
       return h('li', { class: 'inline-flex flex-wrap items-center gap-1' }, [
         hideLinkDetails !== true && assignmentByRole.role === 'final_review_editor'
@@ -116,6 +114,20 @@ export const renderAssignmentsAsRoles = ({
       ])
     })
   ])
+}
+
+const getRoleColor = (role: AssignmentByRole['role']): ThemeColorCommon => {
+  switch (role) {
+    case 'blocked':
+      return 'red'
+    case 'first_editor':
+    case 'second_editor':
+    case 'final_review_editor':
+      return 'green'
+    case 'formatting':
+      return 'blue'
+  }
+  return 'gray'
 }
 
 export const sortIsoDateStrings = (aIsoDate: string | undefined, bIsoDate: string | undefined): number => {

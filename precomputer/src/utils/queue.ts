@@ -6,7 +6,8 @@ import {
   type QueueCommonItem,
   QueueCommonSchema,
   type BlockingReason,
-  type FinalApproval
+  type FinalApproval,
+  AssignmentRoleSchema
 } from '../../../website/app/utils/validators.ts'
 import { assertIsString } from '../utils/typescript.ts'
 import {
@@ -120,8 +121,16 @@ export const getQueueCommon = async ({ api, params }: Props): Promise<QueueCommo
             isEditor: Boolean(isEditor)
           }
         }),
-        assignmentsByRoles: assignmentsByRole.map(([role]): AssignmentsByRole => {
+        assignmentsByRoles: assignmentsByRole.map(([_role]): AssignmentsByRole => {
           let blockingReasons: BlockingReason[] | undefined = undefined
+
+          const { data: role, error } = AssignmentRoleSchema.safeParse(_role)
+
+          if (!role && error) {
+            const errorTitle = `Unknown role ${JSON.stringify(_role)} failed validation. Please add it to the schema and try again.`
+            console.error(errorTitle, error)
+            throw Error(errorTitle)
+          }
 
           if (role === 'blocked' && queueItemBlockingReasons) {
             blockingReasons =

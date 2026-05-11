@@ -54,8 +54,19 @@ export type BlockingReason = z.infer<typeof BlockingReasonSchema>
 //   state: AssignmentStateSchema
 // })
 
+export const AssignmentRoleSchema = z.union([
+  z.literal('blocked'),
+  z.literal('first_editor'),
+  z.literal('final_review_editor'),
+  z.literal('second_editor'),
+  z.literal('second_editor_editor'),
+  z.literal('publisher'),
+  z.literal('ref_checker'),
+  z.literal('formatting'),
+])
+
 const AssignmentsByRoleSchema = z.object({
-  role: z.string(),
+  role: AssignmentRoleSchema,
   blockingReasons: BlockingReasonSchema.array().optional()
   // assignments: AssignmentSchema.array(),
 })
