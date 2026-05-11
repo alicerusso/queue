@@ -189,11 +189,12 @@ const AssignmentsAsRolesComponent = computed(() => {
   if (!props.queue) return null
   const item = props.queue.items.find(queueCommonItem => queueCommonItem.name === props.draftName)
   if (!item) return null
-  const { assignmentsByRoles, name } = item
+  const { assignmentsByRoles, ianaStatus } = item
   if (!assignmentsByRoles) return
 
   return renderAssignmentsByRoles({
     assignmentsByRoles,
+    ianaStatus,
     hideLinkDetails: true,
     linkFinalReviewsBy: item.rfcNumber ? {
       type: 'RFC_NUMBER',

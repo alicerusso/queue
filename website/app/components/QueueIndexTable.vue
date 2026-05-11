@@ -147,6 +147,7 @@ const columns = [
 
       return renderAssignmentsByRoles({
         assignmentsByRoles: value,
+        ianaStatus: data.row.original.ianaStatus,
         hideLinkDetails: false,
         linkFinalReviewsBy: data.row.original.rfcNumber ? {
           type: 'RFC_NUMBER',
@@ -168,6 +169,7 @@ const columns = [
       // The later has less maintenance burden so we'll try (2) until it doesn't work.
       const nodesA = renderAssignmentsByRoles({
         assignmentsByRoles: rowA.original.assignmentsByRoles,
+        ianaStatus: rowA.original.ianaStatus,
         hideLinkDetails: false,
         linkFinalReviewsBy: rowA.original.rfcNumber ? {
           type: 'RFC_NUMBER',
@@ -181,6 +183,7 @@ const columns = [
 
       const nodesB = renderAssignmentsByRoles({
         assignmentsByRoles: rowB.original.assignmentsByRoles,
+        ianaStatus: rowB.original.ianaStatus,
         hideLinkDetails: false,
         linkFinalReviewsBy: rowB.original.rfcNumber ? {
           type: 'RFC_NUMBER',

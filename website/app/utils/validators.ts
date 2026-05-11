@@ -80,8 +80,15 @@ const LabelCommonSchema = z.object({
 
 export type LabelCommon = z.infer<typeof LabelCommonSchema>
 
+export const IanaStatusSlugSchema = z.union([
+  z.literal('no_actions'),
+  z.literal('not_completed'),
+  z.literal('changes_required'),
+  z.literal('reconciled')
+])
+
 const IanaStatusCommonSchema = z.object({
-  slug: z.string(),
+  slug: IanaStatusSlugSchema,
   name: z.string(),
   description: z.string()
 })

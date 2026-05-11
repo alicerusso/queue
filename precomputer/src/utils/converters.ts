@@ -6,6 +6,7 @@ import {
   type RpcRelatedDocument
 } from '../../generated/purple_client/index.ts'
 import {
+  IanaStatusSlugSchema,
   type ClusterDocumentCommon,
   type DocumentReferenceCommon,
   type QueueCommonItem,
@@ -35,8 +36,16 @@ export const parseIanaStatus = (
     return undefined
   }
 
+  const { data: slug, error } = IanaStatusSlugSchema.safeParse(ianaStatus.slug)
+
+  if (!slug && error) {
+    const errorTitle = `Unable to parse iana status slug ${JSON.stringify(ianaStatus.slug)}`
+    console.error(errorTitle, error)
+    throw Error(errorTitle)
+  }
+
   return {
-    slug: ianaStatus.slug,
+    slug,
     name: ianaStatus.name,
     description: ianaStatus.desc
   }

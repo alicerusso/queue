@@ -27,6 +27,7 @@ type BlockingReason = NonNullable<AssignmentByRole['blockingReasons']>[number]
 
 type RenderAssignmentsByRolesProps = {
   assignmentsByRoles: QueueCommonItem['assignmentsByRoles']
+  ianaStatus: QueueCommonItem['ianaStatus'],
   hideLinkDetails: boolean
   linkFinalReviewsBy:
   { type: 'RFC_NUMBER', rfcNumber: number } |
@@ -35,6 +36,7 @@ type RenderAssignmentsByRolesProps = {
 
 export const renderAssignmentsByRoles = ({
   assignmentsByRoles,
+  ianaStatus,
   hideLinkDetails,
   linkFinalReviewsBy
 }: RenderAssignmentsByRolesProps) => {
@@ -60,6 +62,11 @@ export const renderAssignmentsByRoles = ({
       editorRoles.includes(assignmentByRole.role)
     )
 
+  // https://github.com/ietf-tools/queue/issues/29#issuecomment-4144104259
+  const isIANAHold = Boolean(ianaStatus?.slug === 'not_completed') && assignmentsByRoles.some(assignmentsByRole =>
+    assignmentsByRole.role === 'first_editor'
+  )
+
   const humanFriendlyRole = (assignmentByRole: AssignmentByRole): string => {
     switch (assignmentByRole.role) {
       case 'first_editor':
@@ -81,6 +88,7 @@ export const renderAssignmentsByRoles = ({
   }
 
   return h('ul', { class: 'inline-flex flex-wrap items-center gap-1' }, [
+    isIANAHold ? 'IANA hold' : undefined,
     isAwaitingEditorAssignment
       ? h(
         'li',
