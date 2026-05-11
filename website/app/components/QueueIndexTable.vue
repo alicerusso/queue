@@ -57,6 +57,7 @@ import { getVNodeText } from '../utils/vue'
 import { getQueueIndex } from '../utils/api'
 import { calculateEnqueuedAtData, renderAssignmentsByRoles, renderEnqueuedAt, sortIsoDateStrings } from '~/utils/queue'
 import { datatrackerDraftUrlBuilder } from '~/utils/url'
+import { scrollToHashId } from '~/utils/scroll'
 
 type Props = {
   filterByClusterNumber?: number,
@@ -293,4 +294,7 @@ const table = useVueTable({
         : updaterOrValue
   },
 })
+
+
+watch(data, scrollToHashId)
 </script>
