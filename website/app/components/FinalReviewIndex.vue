@@ -1,25 +1,22 @@
 <template>
   <div>
-    <Heading level="1">
-      Final Reviews
-    </Heading>
-    <Heading level="2">
+    <Heading level="2" class="mx-2 mb-2 md:mb-3 text-gray-600 dark:text-gray-200 font-semibold text-balance">
       In progress
     </Heading>
-    <p v-if="data" class="text-sm pl-2 pb-2">Total number of final reviews:
+    <p v-if="data" class="text-sm pl-2 pb-2">Total number of final reviews in progress:
       <b>{{ data.pendingFinalApproval.length }}</b>
     </p>
-    <FinalReviewIndexTable :items="data?.pendingFinalApproval" :error="error" :status="status" />
+    <FinalReviewIndexTable :queue-items="data?.pendingFinalApproval" :error="error" :status="status" />
 
-    <Heading level="2">
+    <Heading level="2" class="mt-6 mx-2 mb-2 md:mb-3 text-gray-600 dark:text-gray-200 font-semibold text-balance">
       For publishing ({{ queueItemsFilterPublisher.length }})
     </Heading>
-    <FinalReviewIndexTable :items="queueItemsFilterPublisher" :error="error" :status="status" />
+    <FinalReviewIndexTable :queue-items="queueItemsFilterPublisher" :error="error" :status="status" />
 
-    <Heading level="2">
+    <Heading level="2" class="mt-6 mx-2 mb-2 md:mb-3 text-gray-600 dark:text-gray-200 font-semibold text-balance">
       Done ({{ queueItemsFilterDone.length }})
     </Heading>
-    <FinalReviewIndexTable :items="queueItemsFilterDone" :error="error" :status="status" />
+    <FinalReviewIndexTable :queue-items="queueItemsFilterDone" :error="error" :status="status" />
 
     <p v-if="generatedAt" class="text-sm italic text-gray-600 dark:text-gray-400 mt-1">
       Last updated
