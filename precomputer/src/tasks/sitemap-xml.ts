@@ -14,10 +14,10 @@ export const markdownPathsJsonPromise = fsPromises.readFile(markdownPathsJsonPat
 type Props = {
   websiteOrigin: string
   clusterIndex: ClusterIndexCommon
-  finalReviewIndex: QueueCommon
+  finalReviewIndexPendingFinalReview: QueueCommon['items']
 }
 
-export const getSiteMapXmls = async ({ websiteOrigin, clusterIndex, finalReviewIndex }: Props): Promise<S3UploadTask[]> => {
+export const getSiteMapXmls = async ({ websiteOrigin, clusterIndex, finalReviewIndexPendingFinalReview }: Props): Promise<S3UploadTask[]> => {
   const markdownPathsJson = await markdownPathsJsonPromise;
   const markdownPaths = JSON.parse(markdownPathsJson);
   if (!Array.isArray(markdownPaths) || !markdownPaths.every(markdownPath => typeof markdownPath === 'string')) {
@@ -56,7 +56,7 @@ export const getSiteMapXmls = async ({ websiteOrigin, clusterIndex, finalReviewI
         }
       ]
     }),
-    ...finalReviewIndex.items.flatMap((queueItem): SitemapItemLoose[] => {
+    ...finalReviewIndexPendingFinalReview.flatMap((queueItem): SitemapItemLoose[] => {
       return [
         ...(queueItem.clusters ?? []).map(cluster => {
           return {

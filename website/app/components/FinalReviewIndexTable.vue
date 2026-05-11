@@ -1,8 +1,5 @@
 <template>
   <div>
-    <p v-if="data" class="text-sm pl-2 pb-2">Total number of final reviews:
-      <b>{{ table.getRowCount() }}</b>
-    </p>
     <RpcTable>
       <RpcThead>
         <tr v-for="headerGroup in table.getHeaderGroups()" :key="headerGroup.id">
@@ -33,10 +30,6 @@
         </tr>
       </RpcTfoot>
     </RpcTable>
-    <p v-if="generatedAt" class="text-sm italic text-gray-600 dark:text-gray-400 mt-1">
-      Last updated
-      <TimeStamp :dateTime="generatedAt" />
-    </p>
   </div>
 </template>
 
@@ -52,27 +45,21 @@ import {
 } from '@tanstack/vue-table'
 import type { SortingState } from '@tanstack/vue-table'
 import { getVNodeText } from '../utils/vue'
-import { getFinalReviewIndex } from '~/utils/api'
 import Label from './Label.vue'
 import { finalReviewPathBuilder } from '~/utils/url'
-import { DateTime } from 'luxon'
+import type { QueueCommonItem } from '~/utils/validators'
 
-const origin = usePublicSiteUrlOrigin()
+type UseAsyncDataReturn = Awaited<ReturnType<typeof useAsyncData>>
+type UseAsyncDataStatus = UseAsyncDataReturn['status']['value']
+type UseAsyncDataError = UseAsyncDataReturn['error']['value']
 
-const {
-  data,
-  status,
-  error,
-} = await useAsyncData(
-  'final-review-index',
-  () => getFinalReviewIndex(origin),
-  {
-    server: false,
-    lazy: true
-  }
-)
+type Props = {
+  queueItems?: QueueCommonItem[]
+  status: UseAsyncDataStatus
+  error: UseAsyncDataError
+}
 
-const generatedAt = computed(() => data.value?.timestampIso ? DateTime.fromISO(data.value.timestampIso) : undefined)
+const props = defineProps<Props>()
 
 const columnHelper = createColumnHelper<QueueCommonItem>()
 
@@ -146,7 +133,7 @@ const emptyArray: QueueCommonItem[] = []
 
 const table = useVueTable({
   get data() {
-    return data.value?.items ?? emptyArray // Need a const emptyArray rather than a new array every data(){} to prevent unnecessary rerenders / freezing
+    return props.queueItems ?? emptyArray // Need a const emptyArray rather than a new array every data(){} to prevent unnecessary rerenders / freezing
   },
   columns,
   state: {
@@ -192,9 +179,5 @@ onMounted(() => {
   if (route.query.search && route.query.search !== searchQuery.value) {
     searchQuery.value = route.query.search as string
   }
-})
-
-useHead({
-  title: 'RPC Queue'
 })
 </script>

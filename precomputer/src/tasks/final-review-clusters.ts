@@ -3,17 +3,17 @@ import { uniq } from 'es-toolkit'
 import { ClusterQueueCommonSchema, type ClusterQueueCommon, type ClusterIndexCommon, type QueueCommon } from '../../../website/app/utils/validators.ts'
 
 type Props = {
-  finalReviewIndex: QueueCommon,
+  finalReviewIndexPendingFinalReview: QueueCommon["items"],
   queueIndex: QueueCommon,
   clusterIndex: ClusterIndexCommon,
 }
 
 export const getFinalReviewClusters = ({
-  finalReviewIndex,
+  finalReviewIndexPendingFinalReview,
   queueIndex,
   clusterIndex,
 }: Props): ClusterQueueCommon[] => {
-  const clusterNumbers = finalReviewIndex.items
+  const clusterNumbers = finalReviewIndexPendingFinalReview
     .flatMap(item => item.clusters)
     .filter(maybeCluster => typeof maybeCluster === 'number')
   const uniqueClusterNumbers = uniq(clusterNumbers)

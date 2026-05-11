@@ -21,14 +21,14 @@
 
 <script setup lang="ts">
 type UseAsyncDataReturn = Awaited<ReturnType<typeof useAsyncData>>
-type Status = UseAsyncDataReturn['status']['value']
-type Error = UseAsyncDataReturn['error']['value']
+type UseAsyncDataStatus = UseAsyncDataReturn['status']['value']
+type UseAsyncDataError = UseAsyncDataReturn['error']['value']
 
 type Props = {
   rowCount: number
   columnCount: number
-  status: Status | Status[]
-  error: Error | Error[]
+  status: UseAsyncDataStatus | UseAsyncDataStatus[]
+  error: UseAsyncDataError | UseAsyncDataError[]
 }
 
 const props = defineProps<Props>()

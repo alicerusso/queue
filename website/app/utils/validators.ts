@@ -180,6 +180,14 @@ export const ClusterQueueCommonSchema = QueueCommonSchema.extend({
   clusterNumber: z.number(),
 })
 
+export const FinalReviewIndexCommonSchema = z.object({
+  timestampIso: z.string(),
+  pendingFinalApproval: z.array(QueueCommonItemSchema),
+  notPendingFinalApproval: z.array(QueueCommonItemSchema)
+})
+
+export type FinalReviewIndexCommon = z.infer<typeof FinalReviewIndexCommonSchema>
+
 export type ClusterQueueCommon = z.infer<typeof ClusterQueueCommonSchema>
 
 export type DocumentReferenceCommon = z.infer<typeof DocumentReferenceCommonSchema>

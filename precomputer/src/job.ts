@@ -74,7 +74,7 @@ const main = async (): Promise<void> => {
   )
 
   const finalReviewClusters = getFinalReviewClusters({
-    finalReviewIndex,
+    finalReviewIndexPendingFinalReview: finalReviewIndex.pendingFinalApproval,
     queueIndex,
     clusterIndex,
   })
@@ -90,7 +90,7 @@ const main = async (): Promise<void> => {
     { key: QUEUE_INDEX_XML_PATH, contents: queueXML },
     { key: QUEUE_XSD_PATH, contents: queueXSD },
     { key: ROBOTS_TXT_PATH, contents: robotsTxt },
-    ...await getSiteMapXmls({ websiteOrigin, clusterIndex, finalReviewIndex }),
+    ...await getSiteMapXmls({ websiteOrigin, clusterIndex, finalReviewIndexPendingFinalReview: finalReviewIndex.pendingFinalApproval }),
     ...faviconUploadTasks,
     ...metaThumbnailsTasks,
     ...finalReviewClusters.map((finalReviewCluster): S3UploadTask => {

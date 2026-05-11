@@ -4,7 +4,7 @@
       class="w-full mx-2 mb-2 md:mb-3 text-gray-600 dark:text-gray-200 font-semibold text-balance">
       Final Review (formerly AUTH48)
     </Heading>
-    <FinalReviewIndexTable />
+    <FinalReviewIndex />
   </div>
 </template>
 

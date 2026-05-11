@@ -5,7 +5,7 @@ import {
   API_FINAL_REVIEW_INDEX_PATH,
   apiFinalReviewCluster
 } from './url'
-import { ClusterPackageCommonSchema, ClusterQueueCommonSchema } from './validators'
+import { ClusterPackageCommonSchema, ClusterQueueCommonSchema, FinalReviewIndexCommonSchema } from './validators'
 
 export const getQueueIndex = async (origin: string) => {
   const path = API_QUEUE_INDEX_PATH
@@ -23,7 +23,7 @@ export const getFinalReviewIndex = async (origin: string) => {
   const path = API_FINAL_REVIEW_INDEX_PATH
   const url = new URL(path, origin).toString()
   const unverifiedData = await $fetch(url)
-  const { data, error } = QueueCommonSchema.safeParse(unverifiedData)
+  const { data, error } = FinalReviewIndexCommonSchema.safeParse(unverifiedData)
   if (error || !data) {
     console.error(
       'Final review index fetch succeeded but data failed validation',
