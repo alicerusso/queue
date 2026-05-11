@@ -18,5 +18,4 @@ export const scrollToHashId = () => {
   } catch (e) {
     console.error(`Unable to scroll/focus to ${JSON.stringify(normalisedHash)} (from ${JSON.stringify(hash)})`, e)
   }
-
 }
