@@ -15,6 +15,7 @@
       {{ props.document.name }}
     </span>
     <span class="inline-flex ml-2 gap-2 leading-2">
+      <BaseBadge v-if="props.document.isBlocked" title="(Blocked)" color="red">blocked</BaseBadge>
       <BaseBadge v-if="props.document.disposition === 'published'" color="green" title="(Disposition: published)">
         published
       </BaseBadge>
