@@ -10,7 +10,13 @@ export const scrollToHashId = () => {
     console.log(`Can't find # target ${JSON.stringify(normalisedHash)} (from ${JSON.stringify(hash)})`)
     return
   }
-  target.scrollIntoView({
-    behavior: 'instant' // this is done on page load so it shouldn't be smooth scrolling
-  })
+  try {
+    target.scrollIntoView({
+      behavior: 'instant' // this is done on page load so it shouldn't be smooth scrolling
+    })
+    target.focus()
+  } catch (e) {
+    console.error(`Unable to scroll/focus to ${JSON.stringify(normalisedHash)} (from ${JSON.stringify(hash)})`, e)
+  }
+
 }
