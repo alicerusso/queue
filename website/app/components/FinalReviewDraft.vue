@@ -28,6 +28,7 @@
       <RpcThead>
         <tr>
           <RpcTh>Approver Name</RpcTh>
+          <RpcTh>Approval Comment</RpcTh>
           <RpcTh text-align="center">Approval Status</RpcTh>
           <RpcTh>Date Approved</RpcTh>
         </tr>
@@ -35,6 +36,7 @@
       <RpcTbody>
         <tr v-for="approverItem in finalReview.finalApprovals">
           <RpcTd>{{ approverItem.approverName }}</RpcTd>
+          <RpcTd>{{ approverItem.comment }}</RpcTd>
           <RpcTd text-align="center">
             <abbr v-if="
               Boolean(approverItem.approvedAtIso) // is there a timestamp            
@@ -108,7 +110,8 @@
         </p>
       </li>
     </ol>
-    <p v-else class="italic">No logs available</p>
+    <p v-else class="italic">No notes available</p>
+
   </div>
 </template>
 
