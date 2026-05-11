@@ -295,6 +295,5 @@ const table = useVueTable({
   },
 })
 
-
 watch(data, scrollToHashId)
 </script>
