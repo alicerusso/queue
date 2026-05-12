@@ -24,9 +24,6 @@
       </BaseBadge>
       <BaseBadge v-if="props.document.disposition === 'created'" color="green" title="(Disposition: created)">created
       </BaseBadge>
-      <BaseBadge v-if="props.document.disposition === 'in_progress'" color="blue" title="(Disposition: in progress)">in
-        progress
-      </BaseBadge>
       <BaseBadge v-if="props.document.isReceived" title="(Received)" color="pink">received</BaseBadge>
       <BaseBadge v-if="!props.document.isReceived" title="(Not Received)" color="orange">not received</BaseBadge>
     </span>
