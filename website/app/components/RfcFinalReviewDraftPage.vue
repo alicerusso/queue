@@ -35,7 +35,7 @@ if (!queueIndex.value || queueIndexStatus.value === 'error') {
   console.error(`[500] RFC ${props.rfcNumber}`, queueIndexError.value)
   throw createError({
     statusCode: 500,
-    statusMessage: 'Internal error',
+    statusMessage: `Internal error ${queueIndexError.value}`,
     fatal: true
   })
 }
@@ -59,7 +59,6 @@ if (!draftQueue.value) {
     fatal: true
   })
 }
-
 
 const route = useRoute()
 

@@ -20,6 +20,7 @@ export default defineNuxtConfig({
     optimizeDeps: {
       include: [
         'luxon',
+        '@vueuse/core',
         '@tanstack/vue-table',
         'es-toolkit',
         'zod',
