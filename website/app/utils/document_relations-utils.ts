@@ -199,42 +199,35 @@ const makeTooltip = (node: NodeParam): string[] | undefined => {
   return tooltip.length > 0 ? tooltip : undefined
 }
 
-const makeText = (node: NodeParam): Line[] => {
-  if (node.rfcNumber) {
-    return wordsToLines(['RFC-to-be', String(node.rfcNumber)])
-  }
-  return wordsToLines([...splitDraftNameIntoWords(node.id)])
-}
-
 /**
  * based on https://docs.google.com/spreadsheets/d/1WoPNZiFf9Hx4Qc6N5UE1-RKhYYNybBeCYZM72wL5TSM/edit?gid=0#gid=0
  */
 export const getCircleTheme = (node: NodeParam): CircleTheme => {
-  if (Boolean(node.isReceived) && Boolean(node.isNormRef) && !(node.hasNormRef) && !(node.isBlocked) && node.disposition === 'in_progress') {
+  if (Boolean(node.isReceived) && Boolean(node.isNormRef) && !Boolean(node.hasNormRef) && !Boolean(node.isBlocked) && node.disposition === 'in_progress') {
     return {
       fill: blue,
       textColor: black,
       strokeWidth: 2,
       strokeStyle: 'solid',
-      text: makeText(node),
+      text: wordsToLines([...splitDraftNameIntoWords(node.id)]),
       tooltip: makeTooltip(node)
     }
   }
-  if (Boolean(node.isReceived) && Boolean(node.hasNormRef) && Boolean(node.hasNormRefInQueue) && !(node.hasNormRefBlocked) && !(node.isBlocked) && node.disposition === 'in_progress') {
+  if (Boolean(node.isReceived) && Boolean(node.hasNormRef) && Boolean(node.hasNormRefInQueue) && !Boolean(node.hasNormRefBlocked) && !Boolean(node.isBlocked) && node.disposition === 'in_progress') {
     return {
       fill: green,
       textColor: black,
       strokeWidth: 2,
       strokeStyle: 'solid',
-      text: makeText(node),
+      text: wordsToLines([...splitDraftNameIntoWords(node.id)]),
       tooltip: makeTooltip(node)
     }
   }
   if (
     Boolean(node.isReceived) && (
-      (Boolean(node.isBlocked) && Boolean(node.isNormRef) && !(node.hasNormRef)) ||
-      (Boolean(node.hasNormRef) && Boolean(node.hasNormRefInQueue) && (node.hasNormRefBlocked)) ||
-      (Boolean(node.isBlocked) && Boolean(node.hasNormRef) && !(node.hasNormRefInQueue) && node.rfcNumber === undefined)
+      (Boolean(node.isBlocked) && Boolean(node.isNormRef) && !Boolean(node.hasNormRef)) ||
+      (Boolean(node.hasNormRef) && Boolean(node.hasNormRefInQueue) && Boolean(node.hasNormRefBlocked)) ||
+      (Boolean(node.isBlocked) && Boolean(node.hasNormRef) && !Boolean(node.hasNormRefInQueue) && node.rfcNumber === undefined)
     )
   ) {
     return {
@@ -242,28 +235,28 @@ export const getCircleTheme = (node: NodeParam): CircleTheme => {
       textColor: black,
       strokeWidth: 2,
       strokeStyle: 'solid',
-      text: makeText(node),
+      text: wordsToLines([...splitDraftNameIntoWords(node.id)]),
       tooltip: makeTooltip(node)
     }
   }
-  if (!(node.isReceived) && Boolean(node.isNormRef)) {
+  if (!Boolean(node.isReceived) && Boolean(node.isNormRef)) {
     return {
       fill: orange,
       textColor: black,
       strokeWidth: 1,
       strokeStyle: 'dotted',
-      text: makeText(node),
+      text: wordsToLines([...splitDraftNameIntoWords(node.id)]),
       tooltip: makeTooltip(node)
     }
   }
 
-  if (Boolean(node.isReceived) && !(node.hasNormRefInQueue) && (!(node.hasNormRefBlocked) || !(node.isBlocked)) && node.disposition === 'published') {
+  if (Boolean(node.isReceived) && !Boolean(node.hasNormRefInQueue) && (!Boolean(node.hasNormRefBlocked) || !Boolean(node.isBlocked)) && node.disposition === 'published') {
     return {
       fill: gray200,
       textColor: black,
       strokeWidth: 0,
       strokeStyle: 'solid',
-      text: makeText(node),
+      text: wordsToLines([...splitDraftNameIntoWords(node.id)]),
       tooltip: makeTooltip(node)
     }
   }
@@ -273,7 +266,7 @@ export const getCircleTheme = (node: NodeParam): CircleTheme => {
     textColor: white,
     strokeWidth: 0,
     strokeStyle: 'solid',
-    text: makeText(node),
+    text: wordsToLines([...splitDraftNameIntoWords(node.id)]),
     tooltip: makeTooltip(node)
   }
 }
