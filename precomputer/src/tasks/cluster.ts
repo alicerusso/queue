@@ -28,7 +28,7 @@ export const getClusterPackage = async ({ api, clusterNumber }: Props): Promise<
       allPublished: clusterDocuments.length > 0 ? clusterDocuments.every(document => document.disposition === 'published') : false,
       documents: clusterDocuments
         .map((clusterDocument): ClusterDocumentCommon => {
-          const { name, rfcNumber, disposition, references, isReceived, isNormRef, isBlocked, finalApprovalCounts } = clusterDocument
+          const { name, rfcNumber, disposition, references, isReceived, isNormref, isBlocked, finalApprovalCounts } = clusterDocument
           return {
             name,
             rfcNumber,
@@ -37,7 +37,7 @@ export const getClusterPackage = async ({ api, clusterNumber }: Props): Promise<
               return reference
             }),
             isReceived,
-            isNormRef,
+            isNormref,
             isBlocked,
             finalApprovalCounts: finalApprovalCounts ? {
               approved: finalApprovalCounts.approved,
