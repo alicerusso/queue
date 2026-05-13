@@ -34,6 +34,7 @@ Name | Type
 `pendingActivities` | [Array&lt;RpcRole&gt;](RpcRole.md)
 `rfcNumber` | number
 `publishedAt` | Date
+`pubOwner` | string
 `consensus` | boolean
 `subseries` | [Array&lt;SubseriesMember&gt;](SubseriesMember.md)
 `ianaStatus` | [IanaStatus](IanaStatus.md)
@@ -77,6 +78,7 @@ const example = {
   "pendingActivities": null,
   "rfcNumber": null,
   "publishedAt": null,
+  "pubOwner": null,
   "consensus": null,
   "subseries": null,
   "ianaStatus": null,

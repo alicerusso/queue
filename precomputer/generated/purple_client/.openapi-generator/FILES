@@ -7,6 +7,7 @@ docs/AdditionalEmailRequest.md
 docs/ApprovalLogMessage.md
 docs/ApprovalLogMessageRequest.md
 docs/Assignment.md
+docs/AssignmentHistory.md
 docs/AssignmentRequest.md
 docs/AuthorOrderRequest.md
 docs/AuthorOrderStatus.md
@@ -35,12 +36,14 @@ docs/DatatrackerPerson.md
 docs/DatatrackerPersonRequest.md
 docs/DeleteMetadataBadRequestResponse.md
 docs/DeleteMetadataNotFoundResponse.md
+docs/DocumentAssignment.md
 docs/DocumentComment.md
 docs/DocumentCommentRequest.md
 docs/Draft.md
 docs/FinalApproval.md
 docs/FinalApprovalCounts.md
 docs/FinalApprovalRequest.md
+docs/History.md
 docs/HistoryLastEdit.md
 docs/IanaStatus.md
 docs/IanaStatusRequest.md
@@ -81,6 +84,8 @@ docs/PatchedSubseriesMemberRequest.md
 docs/PatchedUnusableRfcNumberRequest.md
 docs/Profile.md
 docs/PublicAssignment.md
+docs/PublicCluster.md
+docs/PublicClusterMember.md
 docs/PublicQueueAuthor.md
 docs/PublicQueueItem.md
 docs/PublishPermissionDenied.md
@@ -94,7 +99,6 @@ docs/RfcAuthor.md
 docs/RfcAuthorRequest.md
 docs/RfcToBe.md
 docs/RfcToBeBlockingReason.md
-docs/RfcToBeHistory.md
 docs/RfcToBeNotFoundResponse.md
 docs/RfcToBeRequest.md
 docs/RpcPerson.md
@@ -128,6 +132,7 @@ models/AdditionalEmailRequest.ts
 models/ApprovalLogMessage.ts
 models/ApprovalLogMessageRequest.ts
 models/Assignment.ts
+models/AssignmentHistory.ts
 models/AssignmentRequest.ts
 models/AuthorOrderRequest.ts
 models/AuthorOrderStatus.ts
@@ -156,12 +161,14 @@ models/DatatrackerPerson.ts
 models/DatatrackerPersonRequest.ts
 models/DeleteMetadataBadRequestResponse.ts
 models/DeleteMetadataNotFoundResponse.ts
+models/DocumentAssignment.ts
 models/DocumentComment.ts
 models/DocumentCommentRequest.ts
 models/Draft.ts
 models/FinalApproval.ts
 models/FinalApprovalCounts.ts
 models/FinalApprovalRequest.ts
+models/History.ts
 models/HistoryLastEdit.ts
 models/IanaStatus.ts
 models/IanaStatusRequest.ts
@@ -202,6 +209,8 @@ models/PatchedSubseriesMemberRequest.ts
 models/PatchedUnusableRfcNumberRequest.ts
 models/Profile.ts
 models/PublicAssignment.ts
+models/PublicCluster.ts
+models/PublicClusterMember.ts
 models/PublicQueueAuthor.ts
 models/PublicQueueItem.ts
 models/PublishPermissionDenied.ts
@@ -214,7 +223,6 @@ models/RfcAuthor.ts
 models/RfcAuthorRequest.ts
 models/RfcToBe.ts
 models/RfcToBeBlockingReason.ts
-models/RfcToBeHistory.ts
 models/RfcToBeNotFoundResponse.ts
 models/RfcToBeRequest.ts
 models/RpcPerson.ts

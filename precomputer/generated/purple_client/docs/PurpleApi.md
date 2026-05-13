@@ -45,6 +45,7 @@ All URIs are relative to *http://localhost*
 | [**documentsApprovalLogsPartialUpdate**](PurpleApi.md#documentsapprovallogspartialupdate) | **PATCH** /api/rpc/documents/{draft_name}/approval_logs/{id}/ |  |
 | [**documentsApprovalLogsRetrieve**](PurpleApi.md#documentsapprovallogsretrieve) | **GET** /api/rpc/documents/{draft_name}/approval_logs/{id}/ |  |
 | [**documentsApprovalLogsUpdate**](PurpleApi.md#documentsapprovallogsupdate) | **PUT** /api/rpc/documents/{draft_name}/approval_logs/{id}/ |  |
+| [**documentsAssignmentsList**](PurpleApi.md#documentsassignmentslist) | **GET** /api/rpc/documents/{draft_name}/assignments/ |  |
 | [**documentsAuthorsCreate**](PurpleApi.md#documentsauthorscreate) | **POST** /api/rpc/documents/{draft_name}/authors/ |  |
 | [**documentsAuthorsDestroy**](PurpleApi.md#documentsauthorsdestroy) | **DELETE** /api/rpc/documents/{draft_name}/authors/{id}/ |  |
 | [**documentsAuthorsList**](PurpleApi.md#documentsauthorslist) | **GET** /api/rpc/documents/{draft_name}/authors/ |  |
@@ -143,7 +144,7 @@ All URIs are relative to *http://localhost*
 
 ## apiPubqClustersList
 
-> Array&lt;Cluster&gt; apiPubqClustersList()
+> Array&lt;PublicCluster&gt; apiPubqClustersList()
 
 
 
@@ -182,7 +183,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-[**Array&lt;Cluster&gt;**](Cluster.md)
+[**Array&lt;PublicCluster&gt;**](PublicCluster.md)
 
 ### Authorization
 
@@ -204,7 +205,7 @@ This endpoint does not need any parameter.
 
 ## apiPubqClustersRetrieve
 
-> Cluster apiPubqClustersRetrieve(number)
+> PublicCluster apiPubqClustersRetrieve(number)
 
 
 
@@ -251,7 +252,7 @@ example().catch(console.error);
 
 ### Return type
 
-[**Cluster**](Cluster.md)
+[**PublicCluster**](PublicCluster.md)
 
 ### Authorization
 
@@ -3078,6 +3079,77 @@ example().catch(console.error);
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
+## documentsAssignmentsList
+
+> Array&lt;DocumentAssignment&gt; documentsAssignmentsList(draftName)
+
+
+
+Assignments for a specific document, including per-assignment history
+
+### Example
+
+```ts
+import {
+  Configuration,
+  PurpleApi,
+} from '';
+import type { DocumentsAssignmentsListRequest } from '';
+
+async function example() {
+  console.log("🚀 Testing  SDK...");
+  const config = new Configuration({ 
+    // To configure API key authorization: cookieAuth
+    apiKey: "YOUR API KEY",
+  });
+  const api = new PurpleApi(config);
+
+  const body = {
+    // string
+    draftName: draftName_example,
+  } satisfies DocumentsAssignmentsListRequest;
+
+  try {
+    const data = await api.documentsAssignmentsList(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **draftName** | `string` |  | [Defaults to `undefined`] |
+
+### Return type
+
+[**Array&lt;DocumentAssignment&gt;**](DocumentAssignment.md)
+
+### Authorization
+
+[cookieAuth](../README.md#cookieAuth)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: `application/json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** |  |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
 ## documentsAuthorsCreate
 
 > CreateRfcAuthor documentsAuthorsCreate(draftName, createRfcAuthorRequest)
@@ -4471,7 +4543,7 @@ example().catch(console.error);
 
 ## documentsHistoryList
 
-> Array&lt;RfcToBeHistory&gt; documentsHistoryList(draftName)
+> Array&lt;History&gt; documentsHistoryList(draftName)
 
 
 
@@ -4518,7 +4590,7 @@ example().catch(console.error);
 
 ### Return type
 
-[**Array&lt;RfcToBeHistory&gt;**](RfcToBeHistory.md)
+[**Array&lt;History&gt;**](History.md)
 
 ### Authorization
 

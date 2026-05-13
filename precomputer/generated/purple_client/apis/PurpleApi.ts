@@ -40,10 +40,12 @@ import type {
   CreateRpcRelatedDocumentRequest,
   DeleteMetadataBadRequestResponse,
   DeleteMetadataNotFoundResponse,
+  DocumentAssignment,
   DocumentComment,
   DocumentCommentRequest,
   FinalApproval,
   FinalApprovalRequest,
+  History,
   Label,
   LabelRequest,
   LabelStats,
@@ -72,6 +74,7 @@ import type {
   PatchedSubseriesMemberRequest,
   PatchedUnusableRfcNumberRequest,
   Profile,
+  PublicCluster,
   PublicQueueItem,
   PublishPermissionDenied,
   PublishRfcRequest,
@@ -82,7 +85,6 @@ import type {
   RfcAuthor,
   RfcAuthorRequest,
   RfcToBe,
-  RfcToBeHistory,
   RfcToBeNotFoundResponse,
   RfcToBeRequest,
   RpcPerson,
@@ -153,6 +155,8 @@ import {
     DeleteMetadataBadRequestResponseToJSON,
     DeleteMetadataNotFoundResponseFromJSON,
     DeleteMetadataNotFoundResponseToJSON,
+    DocumentAssignmentFromJSON,
+    DocumentAssignmentToJSON,
     DocumentCommentFromJSON,
     DocumentCommentToJSON,
     DocumentCommentRequestFromJSON,
@@ -161,6 +165,8 @@ import {
     FinalApprovalToJSON,
     FinalApprovalRequestFromJSON,
     FinalApprovalRequestToJSON,
+    HistoryFromJSON,
+    HistoryToJSON,
     LabelFromJSON,
     LabelToJSON,
     LabelRequestFromJSON,
@@ -217,6 +223,8 @@ import {
     PatchedUnusableRfcNumberRequestToJSON,
     ProfileFromJSON,
     ProfileToJSON,
+    PublicClusterFromJSON,
+    PublicClusterToJSON,
     PublicQueueItemFromJSON,
     PublicQueueItemToJSON,
     PublishPermissionDeniedFromJSON,
@@ -237,8 +245,6 @@ import {
     RfcAuthorRequestToJSON,
     RfcToBeFromJSON,
     RfcToBeToJSON,
-    RfcToBeHistoryFromJSON,
-    RfcToBeHistoryToJSON,
     RfcToBeNotFoundResponseFromJSON,
     RfcToBeNotFoundResponseToJSON,
     RfcToBeRequestFromJSON,
@@ -465,6 +471,10 @@ export interface DocumentsApprovalLogsUpdateRequest {
     draftName: string;
     id: number;
     approvalLogMessageRequest: ApprovalLogMessageRequest;
+}
+
+export interface DocumentsAssignmentsListRequest {
+    draftName: string;
 }
 
 export interface DocumentsAuthorsCreateRequest {
@@ -874,16 +884,16 @@ export class PurpleApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiPubqClustersListRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Cluster>>> {
+    async apiPubqClustersListRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<PublicCluster>>> {
         const requestOptions = await this.apiPubqClustersListRequestOpts();
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(ClusterFromJSON));
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(PublicClusterFromJSON));
     }
 
     /**
      */
-    async apiPubqClustersList(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Cluster>> {
+    async apiPubqClustersList(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<PublicCluster>> {
         const response = await this.apiPubqClustersListRaw(initOverrides);
         return await response.value();
     }
@@ -917,16 +927,16 @@ export class PurpleApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiPubqClustersRetrieveRaw(requestParameters: ApiPubqClustersRetrieveRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Cluster>> {
+    async apiPubqClustersRetrieveRaw(requestParameters: ApiPubqClustersRetrieveRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PublicCluster>> {
         const requestOptions = await this.apiPubqClustersRetrieveRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ClusterFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => PublicClusterFromJSON(jsonValue));
     }
 
     /**
      */
-    async apiPubqClustersRetrieve(requestParameters: ApiPubqClustersRetrieveRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Cluster> {
+    async apiPubqClustersRetrieve(requestParameters: ApiPubqClustersRetrieveRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PublicCluster> {
         const response = await this.apiPubqClustersRetrieveRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -2851,6 +2861,51 @@ export class PurpleApi extends runtime.BaseAPI {
     }
 
     /**
+     * Creates request options for documentsAssignmentsList without sending the request
+     */
+    async documentsAssignmentsListRequestOpts(requestParameters: DocumentsAssignmentsListRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['draftName'] == null) {
+            throw new runtime.RequiredError(
+                'draftName',
+                'Required parameter "draftName" was null or undefined when calling documentsAssignmentsList().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+
+        let urlPath = `/api/rpc/documents/{draft_name}/assignments/`;
+        urlPath = urlPath.replace(`{${"draft_name"}}`, encodeURIComponent(String(requestParameters['draftName'])));
+
+        return {
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        };
+    }
+
+    /**
+     * Assignments for a specific document, including per-assignment history
+     */
+    async documentsAssignmentsListRaw(requestParameters: DocumentsAssignmentsListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<DocumentAssignment>>> {
+        const requestOptions = await this.documentsAssignmentsListRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(DocumentAssignmentFromJSON));
+    }
+
+    /**
+     * Assignments for a specific document, including per-assignment history
+     */
+    async documentsAssignmentsList(requestParameters: DocumentsAssignmentsListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<DocumentAssignment>> {
+        const response = await this.documentsAssignmentsListRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Creates request options for documentsAuthorsCreate without sending the request
      */
     async documentsAuthorsCreateRequestOpts(requestParameters: DocumentsAuthorsCreateRequest): Promise<runtime.RequestOpts> {
@@ -3871,16 +3926,16 @@ export class PurpleApi extends runtime.BaseAPI {
 
     /**
      */
-    async documentsHistoryListRaw(requestParameters: DocumentsHistoryListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<RfcToBeHistory>>> {
+    async documentsHistoryListRaw(requestParameters: DocumentsHistoryListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<History>>> {
         const requestOptions = await this.documentsHistoryListRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(RfcToBeHistoryFromJSON));
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(HistoryFromJSON));
     }
 
     /**
      */
-    async documentsHistoryList(requestParameters: DocumentsHistoryListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<RfcToBeHistory>> {
+    async documentsHistoryList(requestParameters: DocumentsHistoryListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<History>> {
         const response = await this.documentsHistoryListRaw(requestParameters, initOverrides);
         return await response.value();
     }

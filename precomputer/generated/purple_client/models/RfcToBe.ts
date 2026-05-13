@@ -260,6 +260,12 @@ export interface RfcToBe {
      */
     readonly publishedAt?: Date | null;
     /**
+     * 
+     * @type {string}
+     * @memberof RfcToBe
+     */
+    readonly pubOwner?: string | null;
+    /**
      * Whether document has consensus (None=unknown)
      * @type {boolean}
      * @memberof RfcToBe
@@ -361,6 +367,7 @@ export function RfcToBeFromJSONTyped(json: any, ignoreDiscriminator: boolean): R
         'pendingActivities': json['pending_activities'] == null ? undefined : ((json['pending_activities'] as Array<any>).map(RpcRoleFromJSON)),
         'rfcNumber': json['rfc_number'] == null ? undefined : json['rfc_number'],
         'publishedAt': json['published_at'] == null ? undefined : (new Date(json['published_at'])),
+        'pubOwner': json['pub_owner'] == null ? undefined : json['pub_owner'],
         'consensus': json['consensus'] == null ? undefined : json['consensus'],
         'subseries': json['subseries'] == null ? undefined : ((json['subseries'] as Array<any>).map(SubseriesMemberFromJSON)),
         'ianaStatus': json['iana_status'] == null ? undefined : IanaStatusFromJSON(json['iana_status']),
@@ -376,7 +383,7 @@ export function RfcToBeToJSON(json: any): RfcToBe {
     return RfcToBeToJSONTyped(json, false);
 }
 
-export function RfcToBeToJSONTyped(value?: Omit<RfcToBe, 'id'|'name'|'draft'|'cluster'|'shepherd'|'iesg_contact'|'assignment_set'|'actionholder_set'|'pending_activities'|'published_at'|'subseries'|'iana_status'|'additional_emails'|'blocking_reasons'|'stream_manager'> | null, ignoreDiscriminator: boolean = false): any {
+export function RfcToBeToJSONTyped(value?: Omit<RfcToBe, 'id'|'name'|'draft'|'cluster'|'shepherd'|'iesg_contact'|'assignment_set'|'actionholder_set'|'pending_activities'|'published_at'|'pub_owner'|'subseries'|'iana_status'|'additional_emails'|'blocking_reasons'|'stream_manager'> | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
