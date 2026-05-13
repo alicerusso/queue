@@ -1,21 +1,28 @@
 import { DateTime } from 'luxon'
 import { uniq } from 'es-toolkit'
-import { ClusterQueueCommonSchema, type ClusterQueueCommon, type ClusterIndexCommon, type QueueCommon } from '../../../website/app/utils/validators.ts'
+import { ClusterQueueCommonSchema, type ClusterQueueCommon, type ClusterIndexCommon, type QueueCommon, FinalReviewIndexCommon } from '../../../website/app/utils/validators.ts'
 
 type Props = {
-  finalReviewIndexPendingFinalReview: QueueCommon["items"],
+  finalReviewIndex: FinalReviewIndexCommon,
   queueIndex: QueueCommon,
   clusterIndex: ClusterIndexCommon,
 }
 
 export const getFinalReviewClusters = ({
-  finalReviewIndexPendingFinalReview,
+  finalReviewIndex,
   queueIndex,
   clusterIndex,
 }: Props): ClusterQueueCommon[] => {
-  const clusterNumbers = finalReviewIndexPendingFinalReview
-    .flatMap(item => item.clusters)
-    .filter(maybeCluster => typeof maybeCluster === 'number')
+
+  const clusterNumbers =
+    [
+      ...finalReviewIndex.pendingFinalApproval
+        .flatMap(item => item.clusters)
+        .filter(maybeCluster => typeof maybeCluster === 'number'),
+      ...finalReviewIndex.notPendingFinalApproval
+        .flatMap(item => item.clusters)
+        .filter(maybeCluster => typeof maybeCluster === 'number')
+    ]
   const uniqueClusterNumbers = uniq(clusterNumbers)
 
   const finalReviewClusters = uniqueClusterNumbers.map((clusterNumber): ClusterQueueCommon => {
