@@ -159,6 +159,19 @@ const ActionHolderSchema = z.object({
   body: z.string().optional(),
 })
 
+export const PendingActivityCommonSlugSchema = z.union([
+  z.literal('formatter'),
+  z.literal(''),
+])
+
+const PendingActivityCommonSchema = z.object({
+  slug: PendingActivityCommonSlugSchema,
+  name: z.string(),
+  desc: z.string().optional(),
+})
+
+export type PendingActivityCommon = z.infer<typeof PendingActivityCommonSchema>
+
 export type ActionHolder = z.infer<typeof ActionHolderSchema>
 
 export const QueueCommonItemSchema = z.object({
@@ -184,7 +197,8 @@ export const QueueCommonItemSchema = z.object({
   groupName: z.string().optional(),
   stdLevel: z.string().optional(),
   references: DocumentReferenceCommonSchema.array().optional(),
-  finalApprovalCounts: FinalApprovalCommonSchema.optional()
+  finalApprovalCounts: FinalApprovalCommonSchema.optional(),
+  pendingActivities: PendingActivityCommonSchema.array().optional()
 })
 
 export type QueueCommonItem = z.infer<typeof QueueCommonItemSchema>

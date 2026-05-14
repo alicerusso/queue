@@ -3,15 +3,18 @@ import {
   type Cluster,
   type QueueItem,
   type ApprovalLogMessage,
-  type RpcRelatedDocument
+  type RpcRelatedDocument,
+  type RpcRole,
 } from '../../generated/purple_client/index.ts'
 import {
   IanaStatusSlugSchema,
+  PendingActivityCommonSlugSchema,
   type ClusterDocumentCommon,
   type DocumentReferenceCommon,
   type QueueCommonItem,
   type ApprovalLogMessageCommon,
   type ActionHolder,
+  type PendingActivityCommon
 } from '../../../website/app/utils/validators.ts'
 import { assertIsString, assertNever } from './typescript.ts'
 
@@ -246,4 +249,28 @@ export const clusterItemToQueueItem = (clusterMember: ClusterMember): QueueCommo
     authors: [],
     disposition: disposition ? parseDisposition(disposition) : 'in_progress'
   }
+}
+
+export const parsePendingActivities = (pendingActivities?: RpcRole[]): QueueCommonItem["pendingActivities"] => {
+  if (!pendingActivities) {
+    return undefined
+  }
+
+  console.log('slugs to parse', pendingActivities.map(pendingActivity => pendingActivity.slug))
+
+  return pendingActivities.map((pendingActivity): PendingActivityCommon => {
+    const { slug: maybeSlug, name, desc } = pendingActivity
+
+    const { data: slug, error } = PendingActivityCommonSlugSchema.safeParse(maybeSlug)
+    if (error && !slug) {
+      console.error(error)
+      throw Error(`Unable to parse pendingActivity.slug: ${JSON.stringify(maybeSlug)} ${JSON.stringify(error)}`)
+    }
+
+    return {
+      slug,
+      name,
+      desc
+    }
+  })
 }

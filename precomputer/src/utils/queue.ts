@@ -17,7 +17,8 @@ import {
   parseLabels,
   parseReferences,
   parseFinalApprovalCounts,
-  parseActionHolderSet
+  parseActionHolderSet,
+  parsePendingActivities
 } from '../utils/converters.ts'
 import { apiPubqClustersRetrieveCached, apiPubqQueueListCached } from './api.ts'
 
@@ -83,6 +84,7 @@ export const getQueueCommon = async ({ api, params }: Props): Promise<QueueCommo
         groupName,
         stdLevel,
         references,
+        pendingActivities,
         rfcNumber,
         actionholderSet,
         finalApproval: finalApprovals,
@@ -159,6 +161,7 @@ export const getQueueCommon = async ({ api, params }: Props): Promise<QueueCommo
         disposition: parseDisposition(disposition),
         ianaStatus: parseIanaStatus(ianaStatus),
         labels: parseLabels(labels),
+        pendingActivities: parsePendingActivities(pendingActivities),
         approvalLogMessages: parseApprovalLogMessages(approvalLogMessages),
         finalApprovals: finalApprovals?.map((finalApproval): FinalApproval => {
           const { comment, approver, approved } = finalApproval
