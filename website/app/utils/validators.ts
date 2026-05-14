@@ -161,7 +161,7 @@ const ActionHolderSchema = z.object({
 
 export const PendingActivityCommonSlugSchema = z.union([
   z.literal('formatter'),
-  z.literal(''),
+  z.literal('publisher'),
 ])
 
 const PendingActivityCommonSchema = z.object({
