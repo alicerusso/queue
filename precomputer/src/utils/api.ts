@@ -87,10 +87,10 @@ type ApiPubqClustersRetrieveCachedProps = {
 export const apiPubqClustersRetrieveCached = async ({ api, clusterNumber }: ApiPubqClustersRetrieveCachedProps): Promise<Cluster> => {
   const cacheKey = getCacheKey(clusterNumber)
   if (!apiPubqClustersRetrieveCache[cacheKey]) {
-    console.info('[apiPubqClustersRetrieveCached] cache miss', `cluster ${clusterNumber}`, { cacheKey })
+    // console.info('[apiPubqClustersRetrieveCached] cache miss', `cluster ${clusterNumber}`, { cacheKey })
     apiPubqClustersRetrieveCache[cacheKey] = await api.apiPubqClustersRetrieve({ number: clusterNumber })
   } else {
-    console.info('[apiPubqClustersRetrieveCached] cache hit', `cluster ${clusterNumber}`, { cacheKey })
+    // console.info('[apiPubqClustersRetrieveCached] cache hit', `cluster ${clusterNumber}`, { cacheKey })
   }
   return apiPubqClustersRetrieveCache[cacheKey]
 }
@@ -105,10 +105,10 @@ type ApiPubqQueueListCachedProps = {
 export const apiPubqQueueListCached = async ({ api, params }: ApiPubqQueueListCachedProps): Promise<PublicQueueItem[]> => {
   const cacheKey = getCacheKey(params)
   if (!ApiPubqQueueListCache[cacheKey]) {
-    console.info('[apiPubqQueueListCached] cache miss', JSON.stringify(params))
+    // console.info('[apiPubqQueueListCached] cache miss', JSON.stringify(params))
     ApiPubqQueueListCache[cacheKey] = await api.apiPubqQueueList(params)
   } else {
-    console.info('[apiPubqQueueListCached] cache hit', JSON.stringify(params))
+    // console.info('[apiPubqQueueListCached] cache hit', JSON.stringify(params))
   }
   return ApiPubqQueueListCache[cacheKey]
 }
