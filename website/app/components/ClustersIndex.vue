@@ -59,6 +59,8 @@ import {
 } from '@tanstack/vue-table'
 import { getVNodeText } from '../utils/vue'
 import type { ClusterDocumentCommon } from '../utils/validators'
+import { uniqBy } from 'es-toolkit'
+import { cluster } from 'd3'
 
 const origin = usePublicSiteUrlOrigin()
 
@@ -132,15 +134,26 @@ const columns = [
   columnHelper.accessor('documents', {
     header: 'Documents',
     cell: data => {
-      const docs = data.getValue()
-      const notReceivedDocs = notReceivedByCluster.value.get(data.row.original.number) ?? []
-      if (data.row.original.allPublished && notReceivedDocs.length === 0) {
+      const clusterDocuments = data.getValue()
+      const notReceivedClusterDocuments = (
+        notReceivedByCluster.value.get(data.row.original.number) ?? []
+      ).filter(notReceivedClusterDocument => {
+        // filter if already in clusterDocuments, or else we'll get duplicate results below in `allClusterDocuments`
+        return !clusterDocuments.find(
+          clusterDocument => clusterDocument.name === notReceivedClusterDocument.name
+        )
+      })
+      if (data.row.original.allPublished && notReceivedClusterDocuments.length === 0) {
         return h('span', 'All published')
       }
-      const allDocs = [...docs, ...notReceivedDocs]
-      return h('ul', { class: 'flex flex-col gap-2' }, allDocs.map(document => {
-        return h('li', h(ClustersIndexItem, { document }))
-      }))
+      const allClusterDocuments = [...clusterDocuments, ...notReceivedClusterDocuments]
+      return h(
+        'ul',
+        { class: 'flex flex-col gap-2' },
+        allClusterDocuments.map(clusterDocument => {
+          return h('li', h(ClustersIndexItem, { clusterDocument }))
+        })
+      )
     },
     enableSorting: false,
   }),
