@@ -14,7 +14,10 @@ export const getCacheKey = (obj: unknown): string => {
       }
       return JSON.stringify(
         Object
-          .entries(obj)
+          .entries(
+            // handles objects and arrays
+            obj
+          )
           .toSorted(([keyA], [keyB]) => keyA.localeCompare(keyB))
           .map(([key, value]) => `${key}=${getCacheKey(value)}`)
           .join('\n')
