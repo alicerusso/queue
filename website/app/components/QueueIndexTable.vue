@@ -142,6 +142,7 @@ const columns = [
 
       return renderAssignmentsByRoles({
         assignmentsByRoles: value,
+        pendingActivities: data.row.original.pendingActivities,
         ianaStatus: data.row.original.ianaStatus,
         hideLinkDetails: false,
         linkFinalReviewsBy: data.row.original.rfcNumber ? {
@@ -164,6 +165,7 @@ const columns = [
       // The later has less maintenance burden so we'll try (2) until it doesn't work.
       const nodesA = renderAssignmentsByRoles({
         assignmentsByRoles: rowA.original.assignmentsByRoles,
+        pendingActivities: rowA.original.pendingActivities,
         ianaStatus: rowA.original.ianaStatus,
         hideLinkDetails: false,
         linkFinalReviewsBy: rowA.original.rfcNumber ? {
@@ -178,6 +180,7 @@ const columns = [
 
       const nodesB = renderAssignmentsByRoles({
         assignmentsByRoles: rowB.original.assignmentsByRoles,
+        pendingActivities: rowB.original.pendingActivities,
         ianaStatus: rowB.original.ianaStatus,
         hideLinkDetails: false,
         linkFinalReviewsBy: rowB.original.rfcNumber ? {

@@ -27,6 +27,7 @@ type BlockingReason = NonNullable<AssignmentByRole['blockingReasons']>[number]
 
 type RenderAssignmentsByRolesProps = {
   assignmentsByRoles: QueueCommonItem['assignmentsByRoles']
+  pendingActivities: QueueCommonItem['pendingActivities'],
   ianaStatus: QueueCommonItem['ianaStatus'],
   hideLinkDetails: boolean
   linkFinalReviewsBy:
@@ -36,6 +37,7 @@ type RenderAssignmentsByRolesProps = {
 
 export const renderAssignmentsByRoles = ({
   assignmentsByRoles,
+  pendingActivities,
   ianaStatus,
   hideLinkDetails,
   linkFinalReviewsBy
@@ -56,13 +58,9 @@ export const renderAssignmentsByRoles = ({
 
   // See https://github.com/ietf-tools/queue/issues/13#issue-4018981455
   const editorRoles: AssignmentByRole['role'][] = ['first_editor', 'second_editor', 'final_review_editor']
-  const assignmentsByRolesFilteredByEditorRole = assignmentsByRolesFiltered.filter((assignmentByRole) =>
-    editorRoles.includes(assignmentByRole.role)
-  )
 
-  const isAwaitingEditorAssignment =
-    assignmentsByRolesFiltered.every((assignmentByRole) => assignmentByRole.role !== 'blocked') &&
-    assignmentsByRolesFilteredByEditorRole.length === 0
+  const isBlocked =
+    assignmentsByRolesFiltered.some((assignmentByRole) => assignmentByRole.role === 'blocked')
 
   // https://github.com/ietf-tools/queue/issues/29#issuecomment-4144104259
   const isIANAHold = Boolean(ianaStatus?.slug === 'not_completed') && assignmentsByRoles.some(assignmentsByRole =>
@@ -81,28 +79,37 @@ export const renderAssignmentsByRoles = ({
     return assignmentByRole.role.replace(/_/g, ' ')
   }
 
+  const slugToHumanReadable = (slug: string): string => {
+    return slug.replace(/_/g, ' ')
+  }
+
   const humanFriendlyBlockingReason = (blockingReason: BlockingReason): string => {
     switch (blockingReason.reason.name) {
       case 'Reference: First Edit Incomplete':
         return 'Author Input Required'
     }
-    return blockingReason.reason.name.replace(/_/g, ' ')
+    return slugToHumanReadable(blockingReason.reason.name)
   }
 
   return h('ul', { class: 'inline-flex flex-wrap items-center gap-1' }, [
     isIANAHold ? 'IANA hold' : undefined,
-    isAwaitingEditorAssignment
-      ? h(
-        'li',
-        { class: 'inline-flex flex-wrap items-center gap-1' },
-        h(
-          BaseBadge,
-          { color: 'emerald' },
-          () => {
-            return 'Awaiting Editor Assignment'
-          }
+    !isBlocked && pendingActivities
+      ? pendingActivities.map(pendingActivity => {
+        return h(
+          'li',
+          { class: 'inline-flex flex-wrap items-center gap-1' },
+          h(
+            BaseBadge,
+            {
+              color:
+                editorRoles.includes(pendingActivity.slug) ? 'emerald' : 'green'
+            },
+            () => {
+              return pendingActivity.name ?? slugToHumanReadable(pendingActivity.slug)
+            }
+          )
         )
-      )
+      })
       : undefined,
     ...assignmentsByRolesFiltered.map((assignmentByRole) => {
       const badge = h(
