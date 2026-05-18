@@ -136,10 +136,6 @@ const columns = [
     cell: data => {
       const value = data.getValue()
 
-      // https://github.com/ietf-tools/queue/issues/29#issuecomment-4144104259
-      // const { ianaStatus } = data.row.original
-      // const firstEditorFinished = Boolean(value?.some(assignmentsByRole => assignmentsByRole.role === 'first_editor' && assignmentsByRole.blockingReasons))
-
       return renderAssignmentsByRoles({
         assignmentsByRoles: value,
         pendingActivities: data.row.original.pendingActivities,
@@ -157,8 +153,9 @@ const columns = [
     sortingFn: (rowA, rowB) => {
       // Keeping the sort function in sync with the render function is important
       // so that similarly rendered items are sorted together.
-      // Because this column's render function is more complicated than usual
-      // (it's not just returning primitive values) we could either.
+      //
+      // However because this column's render function is more complicated than usual
+      // (it's not just returning primitive values) we could either:
       //   1) manually keep custom sorting logic in sync with the visual rendering,
       //      or;
       //   2) stringify the h() render output and sort as strings

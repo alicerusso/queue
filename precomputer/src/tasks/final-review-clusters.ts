@@ -4,19 +4,16 @@ import {
   ClusterQueueCommonSchema,
   type ClusterQueueCommon,
   type ClusterIndexCommon,
-  type QueueCommon,
   type FinalReviewIndexCommon,
 } from '../../../website/app/utils/validators.ts'
 
 type Props = {
   finalReviewIndex: FinalReviewIndexCommon,
-  queueIndex: QueueCommon,
   clusterIndex: ClusterIndexCommon,
 }
 
 export const getFinalReviewClusters = ({
   finalReviewIndex,
-  queueIndex,
   clusterIndex,
 }: Props): ClusterQueueCommon[] => {
 
@@ -31,6 +28,11 @@ export const getFinalReviewClusters = ({
     ]
   const uniqueClusterNumbers = uniq(clusterNumbers)
 
+  const finalApprovals = [
+    ...finalReviewIndex.pendingFinalApproval,
+    ...finalReviewIndex.notPendingFinalApproval
+  ]
+
   const finalReviewClusters = uniqueClusterNumbers.map((clusterNumber): ClusterQueueCommon => {
     const cluster = clusterIndex.list.find(clusterItemCommon =>
       clusterItemCommon.number === clusterNumber
@@ -44,7 +46,7 @@ export const getFinalReviewClusters = ({
       timestampIso: DateTime.now().toUTC().toISO(),
       clusterNumber,
       items: cluster.documents.map(clusterMember => {
-        const draft = queueIndex.items.find(item => item.name === clusterMember.name)
+        const draft = finalApprovals.find(item => item.name === clusterMember.name)
         if (!draft) {
           console.log(`[Cluster ${clusterNumber}] draft ${JSON.stringify(clusterMember.name)} not found in queueIndex. Ignoring.`)
           return undefined

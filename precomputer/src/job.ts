@@ -75,7 +75,6 @@ const main = async (): Promise<void> => {
 
   const finalReviewClusters = getFinalReviewClusters({
     finalReviewIndex,
-    queueIndex,
     clusterIndex,
   })
 
