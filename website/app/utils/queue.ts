@@ -94,25 +94,32 @@ export const renderAssignmentsByRoles = ({
   return h('ul', { class: 'inline-flex flex-wrap items-center gap-1' }, [
     isIANAHold ? 'IANA hold' : undefined,
     !isBlocked && pendingActivities
-      ? pendingActivities.map(pendingActivity => {
-        return h(
-          'li',
-          { class: 'inline-flex flex-wrap items-center gap-1' },
-          h(
-            BaseBadge,
-            {
-              color:
-                editorRoles.includes(pendingActivity.slug) ? 'emerald' : 'green'
-            },
-            () => {
-              if ((pendingActivity.name)) {
-                return `Awaiting ${pendingActivity.name}`
+      ? pendingActivities
+        .filter(pendingActivity => {
+          // If both CURRENT and PENDING assignments are present, the queue should just show the CURRENT assignment.
+          const isAlsoCurrent = assignmentsByRoles.some(assignmentsByRole => assignmentsByRole.role === pendingActivity.slug)
+
+          return !isAlsoCurrent
+        })
+        .map(pendingActivity => {
+          return h(
+            'li',
+            { class: 'inline-flex flex-wrap items-center gap-1' },
+            h(
+              BaseBadge,
+              {
+                color:
+                  editorRoles.includes(pendingActivity.slug) ? 'emerald' : 'green'
+              },
+              () => {
+                if ((pendingActivity.name)) {
+                  return `Awaiting ${pendingActivity.name}`
+                }
+                return `Awaiting ${slugToHumanReadable(pendingActivity.slug)}`
               }
-              return `Awaiting ${slugToHumanReadable(pendingActivity.slug)}`
-            }
+            )
           )
-        )
-      })
+        })
       : undefined,
     ...assignmentsByRolesFiltered.map((assignmentByRole) => {
       const badge = h(
