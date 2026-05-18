@@ -176,7 +176,7 @@ const columns = [
           draftName: rowA.original.name
         }
       })
-      const textA = getVNodeText(nodesA).replace(/\s+/g, '') // normalise whitespace
+      const textA = getVNodeText(nodesA).replace(/\s+/g, ' ') // normalise whitespace
 
       const nodesB = renderAssignmentsByRoles({
         assignmentsByRoles: rowB.original.assignmentsByRoles,
@@ -191,7 +191,7 @@ const columns = [
           draftName: rowB.original.name
         }
       })
-      const textB = getVNodeText(nodesB).replace(/\s+/g, '') // normalise whitespace
+      const textB = getVNodeText(nodesB).replace(/\s+/g, ' ') // normalise whitespace
       const textComparison = textA.localeCompare(textB)
       if (textComparison !== 0) {
         return textComparison
